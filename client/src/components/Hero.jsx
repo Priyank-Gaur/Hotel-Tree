@@ -1,7 +1,7 @@
 import React from "react";
 import heroImage from "../assets/heroImage.png";
 import { assets,cities } from "../assets/assets";
-const Hero = () => {
+const Hero = ({ setShowRegModal }) => {
   return (
     <div
       className="flex flex-col items-start justify-center px-6 md:px-16 lg:px-24 xl:px-32 text-white bg-no-repeat bg-cover bg-center h-screen"
@@ -20,6 +20,13 @@ const Hero = () => {
         Unparalleled luxury and comfort await at the world's most exclusive
         hotels and resorts. Start your journey today.
       </p>
+
+      <button 
+        onClick={() => setShowRegModal(true)}
+        className="mt-6 border border-white px-6 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all"
+      >
+        List your property
+      </button>
 
       <form className="bg-white text-gray-500 rounded-lg px-6 py-4 mt-5 flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto">
         <div>

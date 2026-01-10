@@ -125,6 +125,7 @@ export const userDummyData={
 }
 
 // Hotel Dummy Data
+// Hotel Dummy Data
 export const hotelDummyData={
     "_id":"ht_8492kd92",
     "name":"Skyline Residency",
@@ -137,18 +138,54 @@ export const hotelDummyData={
     "__v":0
 }
 
+const hotelDummyData2 = {
+    "_id":"ht_8492kd93",
+    "name":"The Grand Oliver",
+    "address":"123 Cherry Blossom Lane, Shinjuku",
+    "contact":"+81 90 1234 5678",
+    "owner":userDummyData,
+    "city":"Tokyo",
+    "createdAt":"2025-03-02T07:15:11.663Z",
+    "updatedAt":"2025-03-02T07:15:11.663Z",
+    "__v":0
+}
+
+const hotelDummyData3 = {
+    "_id":"ht_8492kd94",
+    "name":"Royal Palace Berlin",
+    "address":"45 Historic Center, Mitte",
+    "contact":"+49 30 1234 5678",
+    "owner":userDummyData,
+    "city":"Berlin",
+    "createdAt":"2025-03-03T07:15:11.663Z",
+    "updatedAt":"2025-03-03T07:15:11.663Z",
+    "__v":0
+}
+
+const hotelDummyData4 = {
+    "_id":"ht_8492kd95",
+    "name":"Seaside Resort",
+    "address":"88 Bondi Beach, Coastal Road",
+    "contact":"+61 2 1234 5678",
+    "owner":userDummyData,
+    "city":"Sydney",
+    "createdAt":"2025-03-04T07:15:11.663Z",
+    "updatedAt":"2025-03-04T07:15:11.663Z",
+    "__v":0
+}
+
 // Rooms Dummy Data
 export const roomsDummyData=[
     {_id:"rm_101",hotel:hotelDummyData,roomType:"Luxury Suite",pricePerNight:499,amenities:["Free WiFi","Pool Access","Room Service"],images:[roomImg1,roomImg2,roomImg3,roomImg4],isAvailable:true,createdAt:"2025-03-05T10:21:04Z",updatedAt:"2025-03-05T10:21:04Z",__v:0},
-    {_id:"rm_102",hotel:hotelDummyData,roomType:"Deluxe Room",pricePerNight:349,amenities:["Free Breakfast","Free WiFi"],images:[roomImg2,roomImg3,roomImg4,roomImg1],isAvailable:true,createdAt:"2025-03-06T10:21:04Z",updatedAt:"2025-03-06T10:21:04Z",__v:0},
-    {_id:"rm_103",hotel:hotelDummyData,roomType:"Standard Room",pricePerNight:249,amenities:["Free WiFi","Room Service"],images:[roomImg3,roomImg4,roomImg1,roomImg2],isAvailable:true,createdAt:"2025-03-07T10:21:04Z",updatedAt:"2025-03-07T10:21:04Z",__v:0},
-    {_id:"rm_104",hotel:hotelDummyData,roomType:"Single Room",pricePerNight:179,amenities:["Free WiFi"],images:[roomImg4,roomImg1,roomImg2,roomImg3],isAvailable:true,createdAt:"2025-03-08T10:21:04Z",updatedAt:"2025-03-08T10:21:04Z",__v:0},
+    {_id:"rm_102",hotel:hotelDummyData2,roomType:"Deluxe Room",pricePerNight:349,amenities:["Free Breakfast","Free WiFi"],images:[roomImg2,roomImg3,roomImg4,roomImg1],isAvailable:true,createdAt:"2025-03-06T10:21:04Z",updatedAt:"2025-03-06T10:21:04Z",__v:0},
+    {_id:"rm_103",hotel:hotelDummyData3,roomType:"Standard Room",pricePerNight:249,amenities:["Free WiFi","Room Service"],images:[roomImg3,roomImg4,roomImg1,roomImg2],isAvailable:true,createdAt:"2025-03-07T10:21:04Z",updatedAt:"2025-03-07T10:21:04Z",__v:0},
+    {_id:"rm_104",hotel:hotelDummyData4,roomType:"Single Room",pricePerNight:179,amenities:["Free WiFi"],images:[roomImg4,roomImg1,roomImg2,roomImg3],isAvailable:true,createdAt:"2025-03-08T10:21:04Z",updatedAt:"2025-03-08T10:21:04Z",__v:0},
 ]
 
 // User Bookings Dummy Data
 export const userBookingsDummyData=[
     {_id:"bk_301",user:userDummyData,room:roomsDummyData[0],hotel:hotelDummyData,checkInDate:"2025-06-10T00:00:00Z",checkOutDate:"2025-06-12T00:00:00Z",totalPrice:998,guests:2,status:"confirmed",paymentMethod:"Stripe",isPaid:true,createdAt:"2025-04-01T06:42:01Z",updatedAt:"2025-04-01T06:43:54Z",__v:0},
-    {_id:"bk_302",user:userDummyData,room:roomsDummyData[2],hotel:hotelDummyData,checkInDate:"2025-05-15T00:00:00Z",checkOutDate:"2025-05-16T00:00:00Z",totalPrice:249,guests:1,status:"pending",paymentMethod:"Pay At Hotel",isPaid:false,createdAt:"2025-04-02T06:41:45Z",updatedAt:"2025-04-02T06:41:45Z",__v:0},
+    {_id:"bk_302",user:userDummyData,room:roomsDummyData[2],hotel:hotelDummyData3,checkInDate:"2025-05-15T00:00:00Z",checkOutDate:"2025-05-16T00:00:00Z",totalPrice:249,guests:1,status:"pending",paymentMethod:"Pay At Hotel",isPaid:false,createdAt:"2025-04-02T06:41:45Z",updatedAt:"2025-04-02T06:41:45Z",__v:0},
 ]
 
 // Dashboard Dummy Data
@@ -157,13 +194,3 @@ export const dashboardDummyData={
     "totalRevenue":1247,
     "bookings":userBookingsDummyData
 }
-
-// --------- SVG code for Book Icon------
-/* 
-const BookIcon = ()=>(
-    <svg className="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" >
-    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
-</svg>
-)
-
-*/
