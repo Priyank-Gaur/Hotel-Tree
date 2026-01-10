@@ -9,22 +9,38 @@ import MyBookings from './pages/MyBookings';
 import Footer from "./components/Footer.jsx";
 import HotelReg from "./components/HotelReg";
 
+import Layout from './pages/hotelOwner/Layout';
+import Dashboard from './pages/hotelOwner/Dashboard';
+import AddRoom from './pages/hotelOwner/AddRoom';
+import ListRoom from './pages/hotelOwner/ListRoom';
+
+import AppContextProvider from './context/AppContext';
+
 const App = () => {
   const isOwnerPath = useLocation().pathname.includes("owner");
   return (
-    <div>
-      {!isOwnerPath && <Navbar />}
-      {false && <HotelReg/>}
-      <div className="min-h-[70vh]">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/rooms" element={<AllRooms />} />
-          <Route path="/rooms/:id" element={<RoomDetails />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-        </Routes>
+    <AppContextProvider>
+      <div>
+        {!isOwnerPath && <Navbar />}
+        {false && <HotelReg/>}
+        <div className="min-h-[70vh]">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/rooms" element={<AllRooms />} />
+            <Route path="/rooms/:id" element={<RoomDetails />} />
+            <Route path="/my-bookings" element={<MyBookings />} />
+            
+             {/* Admin Routes */}
+             <Route path="/owner" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="add-room" element={<AddRoom />} />
+                <Route path="list-room" element={<ListRoom />} />
+            </Route>
+          </Routes>
+        </div>
+        {!isOwnerPath && <Footer />}
       </div>
-      {!isOwnerPath && <Footer />}
-    </div>
+    </AppContextProvider>
   );
 };
 
