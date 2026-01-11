@@ -44,73 +44,123 @@ const Navbar = () => {
     }, [location.pathname]);
 
     return (
-
-            <nav className={`fixed top-0 left-0 bg-indigo-500 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${isScrolled ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4" : "py-4 md:py-6"}`}>
+            <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 transition-all duration-300 z-50 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-6"}`}>
 
                 {/* Logo */}
                 <Link to ='/'>
-                <img src={assets.logo} alt="logo" className={`h-9 ${isScrolled && "invert opacity-80"}`}/>
+                    <img 
+                        src={assets.logo} 
+                        alt="logo" 
+                        className={`h-10 transition-all duration-300 ${isScrolled ? "brightness-0 opacity-80" : "brightness-0 invert"}`} 
+                    />
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-4 lg:gap-8">
+                <div className="hidden md:flex items-center gap-8">
                     {navLinks.map((link, i) => (
-                        <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"}`}>
+                        <Link 
+                            key={i} 
+                            to={link.path} 
+                            className={`text-sm font-medium tracking-wide hover:opacity-70 transition-opacity ${isScrolled ? "text-gray-800" : "text-white"}`}
+                        >
                             {link.name}
-                            <div className={`${isScrolled ? "bg-gray-700" : "bg-white"} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
                         </Link>
                     ))}
-                    <button className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`} onClick={()=>navigate('/owner')}>
+                    <button 
+                        className={`px-5 py-2 text-xs font-semibold uppercase tracking-wider rounded-full border transition-all ${isScrolled ? 'border-gray-300 text-gray-800 hover:bg-gray-50' : 'border-white/50 text-white hover:bg-white/10'}`} 
+                        onClick={()=>navigate('/owner')}
+                    >
                         Dashboard
                     </button>
                 </div>
 
                 {/* Desktop Right */}
-                <div className="hidden md:flex items-center gap-4">
-                    <img src={assets.searchIcon} alt="language" className={`h-7 transition-all duration-500 ${isScrolled && "invert"}`} />
+                <div className="hidden md:flex items-center gap-6">
+                    <img 
+                        src={assets.searchIcon} 
+                        alt="search" 
+                        className={`w-5 h-5 cursor-pointer transition-all ${isScrolled ? "opacity-60" : "invert opacity-100"}`} 
+                    />
                     
                     {user ?
-                    (<UserButton>
+                    (<UserButton afterSignOutUrl="/">
                         <UserButton.MenuItems>
-                            <UserButton.Action label='My Bookings' labelIcon={<BookIcon/>} onClick={()=>navigate('/my-bookings')} ></UserButton.Action>
+                            <UserButton.Action label='My Bookings' labelIcon={<BookIcon/>} onClick={()=>navigate('/my-bookings')} />
                         </UserButton.MenuItems>
                     </UserButton>) 
                     :
-                    (<button onClick={openSignIn} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}>
+                    (<button 
+                        onClick={openSignIn} 
+                        className={`px-6 py-2 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-xl ${isScrolled ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-white text-blue-900 hover:bg-gray-100"}`}
+                    >
                         Login
                     </button>)  
                      }
                 </div>
 
                 {/* Mobile Menu Button */}
-                <div className="flex items-center gap-3 md:hidden">
-                {user && <UserButton>
+                <div className="flex items-center gap-4 md:hidden">
+                    {user && <UserButton afterSignOutUrl="/">
                         <UserButton.MenuItems>
-                            <UserButton.Action label='My Bookings' labelIcon={<BookIcon/>} onClick={()=>navigate('/my-bookings')} ></UserButton.Action>
+                            <UserButton.Action label='My Bookings' labelIcon={<BookIcon/>} onClick={()=>navigate('/my-bookings')} />
                         </UserButton.MenuItems>
                     </UserButton>}
-                    <img onClick={()=>setIsMenuOpen(!isMenuOpen)} src={assets.menuIcon} alt="search" className={`h-4 ${isScrolled && "invert"}`} />
+                    
+                    <button onClick={()=>setIsMenuOpen(!isMenuOpen)} className="focus:outline-none">
+                         <img 
+                            src={assets.menuIcon} 
+                            alt="menu" 
+                            className={`w-6 h-6 transition-all ${isScrolled ? "opacity-80" : "invert"}`} 
+                        />
+                    </button>
                 </div>
 
-                {/* Mobile Menu */}
-                <div className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-                    <button className="absolute top-4 right-4" onClick={() => setIsMenuOpen(false)}>
-                        <img src={assets.closeIcon} alt="close" className="h-6.5" />
-                    </button>
+                {/* Mobile Menu Overlay */}
+                 <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`} onClick={() => setIsMenuOpen(false)} />
 
-                    {navLinks.map((link, i) => (
-                        <Link key={i} to={link.path} onClick={() => setIsMenuOpen(false)}>
-                            {link.name}
-                        </Link>
-                    ))}
+                {/* Mobile Menu Sidebar */}
+                <div className={`fixed top-0 right-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 md:hidden flex flex-col p-6 gap-6 ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+                    <div className="flex justify-between items-center mb-4">
+                        <span className="font-playfair text-xl font-bold text-gray-900">HotelTree</span>
+                        <button onClick={() => setIsMenuOpen(false)}>
+                            <img src={assets.closeIcon} alt="close" className="w-5 h-5 opacity-60 hover:opacity-100" />
+                        </button>
+                    </div>
 
-                   {user && <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" onClick={()=>navigate('/owner')}>
-                        Dashboard
-                    </button>}
+                    <div className="flex flex-col gap-4">
+                        {navLinks.map((link, i) => (
+                            <Link 
+                                key={i} 
+                                to={link.path} 
+                                onClick={() => setIsMenuOpen(false)}
+                                className="text-gray-600 font-medium hover:text-blue-600 transition-colors"
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                    </div>
 
-                    {!user &&<button onClick={openSignIn} className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
-                        Login
-                    </button>}
+                   <div className="mt-auto flex flex-col gap-4">
+                        {user && <button 
+                            className="w-full py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors" 
+                            onClick={()=>{
+                                navigate('/owner');
+                                setIsMenuOpen(false);
+                            }}
+                        >
+                            Owner Dashboard
+                        </button>}
+
+                        {!user &&<button 
+                            onClick={()=>{
+                                openSignIn();
+                                setIsMenuOpen(false);
+                            }} 
+                            className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium shadow-md hover:bg-blue-700 transition-colors"
+                        >
+                            Login
+                        </button>}
+                   </div>
                 </div>
             </nav>
     );

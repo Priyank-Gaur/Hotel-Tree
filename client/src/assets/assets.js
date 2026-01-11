@@ -88,10 +88,17 @@ export const exclusiveOffers=[
 ]
 
 // Testimonials
+import profile_noah from './profile_noah.png'
+import profile_ava from './profile_ava.png'
+import profile_rohan from './profile_rohan.png'
+
+// ... (existing imports)
+
+// Testimonials
 export const testimonials=[
-    {id:1,name:"Noah Williams",address:"Toronto, Canada",image:"https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=200",rating:5,review:"Smooth experience from booking to checkout. Highly reliable platform."},
-    {id:2,name:"Ava Müller",address:"Berlin, Germany",image:"https://images.unsplash.com/photo-1544725176-7c40e5a2c9f9?q=80&w=200",rating:4,review:"The hotel suggestions matched my style perfectly. Loved it!"},
-    {id:3,name:"Rohan Mehta",address:"Mumbai, India",image:"https://images.unsplash.com/photo-1614289371518-722f2615943d?q=80&w=200",rating:5,review:"Affordable luxury stays with excellent support. Will use again."},
+    {id:1,name:"Noah Williams",address:"Toronto, Canada",image:profile_noah,rating:5,review:"Smooth experience from booking to checkout. Highly reliable platform."},
+    {id:2,name:"Ava Müller",address:"Berlin, Germany",image:profile_ava,rating:4,review:"The hotel suggestions matched my style perfectly. Loved it!"},
+    {id:3,name:"Rohan Mehta",address:"Mumbai, India",image:profile_rohan,rating:5,review:"Affordable luxury stays with excellent support. Will use again."},
 ]
 
 // Facility Icons

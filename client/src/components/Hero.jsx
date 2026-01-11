@@ -1,143 +1,117 @@
 import React from "react";
 import heroImage from "../assets/heroImage.png";
-import { assets,cities } from "../assets/assets";
+import { assets, cities } from "../assets/assets";
+
 const Hero = ({ setShowRegModal }) => {
   return (
-    <div
-      className="flex flex-col items-start justify-center px-6 md:px-16 lg:px-24 xl:px-32 text-white bg-no-repeat bg-cover bg-center h-screen"
-      style={{ backgroundImage: `url(${heroImage})` }}
-    >
-      <p className="bg-[#49B9FF]/50 px-3.5 py-1 rounded-full mt-20">
-        The Ultimate Hotel Experience
-      </p>
-      <h1
-        className="font-playfair text-2x1 md:text-5x1 md:text-[56px] md: leading-
-[56px] font-bold md: font-extrabold max-w-xl mt-4"
-      >
-        Discover Your Perfect Gateway Destination
-      </h1>
-      <p className="max-w-130 mt-2 text-sm md:text-base">
-        Unparalleled luxury and comfort await at the world's most exclusive
-        hotels and resorts. Start your journey today.
-      </p>
+    <div className="relative h-screen w-full overflow-hidden">
+        {/* Background Image with Zoom Effect */}
+        <div 
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] ease-in-out hover:scale-110"
+            style={{ backgroundImage: `url(${heroImage})`, transformOrigin: 'center' }}
+        ></div>
 
-      <button 
-        onClick={() => setShowRegModal(true)}
-        className="mt-6 border border-white px-6 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-black transition-all"
-      >
-        List your property
-      </button>
+        {/* Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
 
-      <form className="bg-white text-gray-500 rounded-lg px-6 py-4 mt-5 flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto">
-        <div>
-          <div className="flex items-center gap-2">
-            <img src={assets.calenderIcon} alt="" className="h-4" />
-            <label htmlFor="destinationInput">Destination</label>
-          </div>
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center text-white">
+            
+            <div className="animate-fade-in-up">
+                <span className="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-sm font-medium tracking-wider mb-6">
+                    THE ULTIMATE ESCAPE
+                </span>
+                
+                <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 drop-shadow-lg">
+                    Experience <span className="italic text-blue-400">Luxury</span> <br/> Like Never Before
+                </h1>
+                
+                <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200 font-light mb-10 leading-relaxed">
+                    Discover handpicked 5-star hotels and resorts for your perfect getaway. 
+                    Unmatched comfort, breathtaking views, and world-class service.
+                </p>
+            </div>
 
-          <input
-            list="destinations"
-            id="destinationInput"
-            type="text"
-            className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none"
-            placeholder="Type here"
-            required
-          />
-          <datalist id="destinations">
-            {cities.map((city, index) => (
-              <option value={city} key={index} />
-            ))}
-          </datalist>
-        </div>
+            {/* Glassmorphism Search Bar */}
+            <form className="w-full max-w-5xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row gap-4 animate-fade-in-up delay-100">
+                
+                {/* Destination */}
+                <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
+                    <div className="flex items-center gap-3 mb-1">
+                        <img src={assets.locationIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
+                        <label htmlFor="destinationInput" className="text-xs font-medium uppercase tracking-wider text-gray-300">Destination</label>
+                    </div>
+                    <input
+                        list="destinations"
+                        id="destinationInput"
+                        type="text"
+                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
+                        placeholder="Where to?"
+                        required
+                    />
+                    <datalist id="destinations">
+                        {cities.map((city, index) => (
+                            <option value={city} key={index} />
+                        ))}
+                    </datalist>
+                </div>
 
-        <div>
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-4 h-4 text-gray-800"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+                {/* Check In */}
+                <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
+                     <div className="flex items-center gap-3 mb-1">
+                        <img src={assets.calenderIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
+                        <label htmlFor="checkIn" className="text-xs font-medium uppercase tracking-wider text-gray-300">Check In</label>
+                    </div>
+                    <input
+                        id="checkIn"
+                        type="date"
+                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium [&::-webkit-calendar-picker-indicator]:invert"
+                    />
+                </div>
+
+                 {/* Check Out */}
+                 <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
+                     <div className="flex items-center gap-3 mb-1">
+                        <img src={assets.calenderIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
+                        <label htmlFor="checkOut" className="text-xs font-medium uppercase tracking-wider text-gray-300">Check Out</label>
+                    </div>
+                    <input
+                        id="checkOut"
+                        type="date"
+                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium [&::-webkit-calendar-picker-indicator]:invert"
+                    />
+                </div>
+
+                {/* Guests */}
+                <div className="w-32 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
+                     <div className="flex items-center gap-3 mb-1">
+                        <img src={assets.userIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
+                        <label htmlFor="guests" className="text-xs font-medium uppercase tracking-wider text-gray-300">Guests</label>
+                    </div>
+                    <input
+                        min={1}
+                        max={10}
+                        id="guests"
+                        type="number"
+                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
+                        placeholder="2"
+                    />
+                </div>
+
+                {/* Search Button */}
+                <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 font-semibold text-lg transition-all shadow-lg hover:shadow-blue-600/50 flex items-center justify-center gap-2">
+                    <img src={assets.searchIcon} alt="" className="w-5 h-5 invert" />
+                    Search
+                </button>
+            </form>
+
+            <button 
+                onClick={() => setShowRegModal(true)}
+                className="mt-12 text-sm text-gray-300 hover:text-white border-b border-transparent hover:border-white transition-all pb-1"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
-              />
-            </svg>
-            <label htmlFor="checkIn">Check in</label>
-          </div>
-          <input
-            id="checkIn"
-            type="date"
-            className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none"
-          />
+                Are you a property owner? List your hotel
+            </button>
         </div>
-
-        <div>
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-4 h-4 text-gray-800"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
-              />
-            </svg>
-            <label htmlFor="checkOut">Check out</label>
-          </div>
-          <input
-            id="checkOut"
-            type="date"
-            className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none"
-          />
-        </div>
-
-        <div className="flex md:flex-col max-md:gap-2 max-md:items-center">
-          <label htmlFor="guests">Guests</label>
-          <input
-            min={1}
-            max={4}
-            id="guests"
-            type="number"
-            className=" rounded border border-gray-200 px-3 py-1.5 mt-1.5 text-sm outline-none  max-w-16"
-            placeholder="0"
-          />
-        </div>
-
-        <button className="flex items-center justify-center gap-1 rounded-md bg-black py-3 px-4 text-white my-auto cursor-pointer max-md:w-full max-md:py-1">
-          <svg
-            className="w-4 h-4 text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth="2"
-              d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-            />
-          </svg>
-          <span>Search</span>
-        </button>
-      </form>
     </div>
   );
 };
