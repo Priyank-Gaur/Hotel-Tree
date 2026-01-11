@@ -1,9 +1,11 @@
+import connectDB from "../configs/db.js";
 import User from "../models/user.js";
 import {Webhook} from "svix";
 
 
 const clerkWebhooks = async (req, res) => {
     try{
+        await connectDB();
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
         const headers = {
             "svix-id": req.headers["svix-id"],
