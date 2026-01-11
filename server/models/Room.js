@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-const roomSchema = new mongoose. Schema({
+
+
+const roomSchema = new mongoose.Schema({
     hotel : {type : String, required : true, ref : "Hotel"},
     roomType : {type : String, required : true},
     pricePerNight : {type : Number, required : true},
