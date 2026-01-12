@@ -42,7 +42,17 @@ export const createBooking = async (req, res) => {
         }
 
         const roomData = await Room.findById(room).populate('hotel')
-        let totalPrice = roomData.pricePerNight * (checkOutDate - checkInDate);
+        // Calculate difference in milliseconds
+        const diffTime = Math.abs(new Date(checkOutDate) - new Date(checkInDate));
+        // Convert to days
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        // If checkIn and checkOut are same day (should be validated ideally), assume 1 night or 0 depending on logic, 
+        // but typically booking is at least 1 night. If diffDays is 0, let's default to 1 or handle logic.
+        // For now, let's trust the dates are at least 1 day apart or handle 0 as 1 day charge if business logic dictates, 
+        // but physically it's 0 nights. Let's stick to standard math.
+        
+        let totalPrice = roomData.pricePerNight * (diffDays > 0 ? diffDays : 1);
         const booking = await Booking.create({
             user,
             room,

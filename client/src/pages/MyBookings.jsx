@@ -1,15 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { userBookingsDummyData, assets } from "../assets/assets";
+import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const MyBookings = () => {
     const navigate = useNavigate();
-  // Using dummy data directly, in real app this would be fetched
-  const [bookings, setBookings] = useState([]);
+    const { axios, getToken, user } = useAppContext();
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBookings(userBookingsDummyData);
-  }, []);
+    const fetchBookings = async () => {
+        try {
+            const token = await getToken();
+            const response = await axios.get('/api/booking/user',
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if(response.data.success){
+                setBookings(response.data.bookings);
+            }
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+            toast.error("Failed to fetch bookings");
+        } finally {
+            setLoading(false);
+        }
+    }
+    if(user){
+        fetchBookings();
+    }
+  }, [user]);
+
+  if(loading){
+      return <div className="h-screen flex items-center justify-center">Loading bookings...</div>;
+  }
 
   return (
     <div className="px-6 md:px-16 lg:px-24 py-10 pt-32 min-h-screen bg-gray-50/50">
@@ -61,7 +86,7 @@ const MyBookings = () => {
                   </div>
                    <div className="flex flex-col">
                       <span className="text-gray-500 text-xs uppercase font-semibold">Room Type</span>
-                      <span>{booking.room.roomType}</span>
+                       <span>{booking.room?.roomType || 'Standard Room'}</span>
                   </div>
                    <div className="flex flex-col">
                       <span className="text-gray-500 text-xs uppercase font-semibold">Guests</span>

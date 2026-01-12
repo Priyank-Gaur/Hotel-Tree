@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 const RoomDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { axios } = useAppContext();
+  const { axios, getToken, user, setShowHotelReg } = useAppContext();
   const [room, setRoom] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -17,6 +17,7 @@ const RoomDetails = () => {
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [availabilityStatus, setAvailabilityStatus] = useState("idle"); // idle, checking, available, unavailable
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -56,8 +57,73 @@ const RoomDetails = () => {
         } else {
              setTotalPrice(room.pricePerNight);
         }
+        // Reset availability when dates change
+        setAvailabilityStatus("idle");
     }
   }, [checkIn, checkOut, room]);
+
+  const handleCheckAvailability = async () => {
+    if (!checkIn || !checkOut) {
+      toast.error("Please select both check-in and check-out dates");
+      return;
+    }
+    setAvailabilityStatus("checking");
+    try {
+      const response = await axios.post('/api/booking/check-availability', {
+        checkInDate: checkIn,
+        checkOutDate: checkOut,
+        room: room._id
+      });
+      if (response.data.success) {
+        if (response.data.isAvailable) {
+          setAvailabilityStatus("available");
+          toast.success("Room is available!");
+        } else {
+          setAvailabilityStatus("unavailable");
+          toast.error("Room is not available for these dates");
+        }
+      } else {
+        toast.error(response.data.message);
+        setAvailabilityStatus("idle");
+      }
+    } catch (error) {
+      console.error("Availability check failed:", error);
+      toast.error("Failed to check availability");
+      setAvailabilityStatus("idle");
+    }
+  };
+
+  const handleBooking = async () => {
+    if (!user) {
+      toast.error("Please login to book a room");
+      // Maybe open login modal if available, or just toast
+      return;
+    }
+    if(availabilityStatus !== 'available') return;
+      
+    try {
+        const token = await getToken();
+        const response = await axios.post('/api/booking/book', 
+            {
+              checkInDate: checkIn,
+              checkOutDate: checkOut,
+              room: room._id,
+              guests,
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+          
+        if(response.data.success) {
+            toast.success("Booking successful!");
+            navigate('/my-bookings');
+        } else {
+            toast.error(response.data.message);
+        }
+    } catch(error) {
+        console.error("Booking failed:", error);
+        toast.error("Failed to book room");
+    }
+  };
 
 
   if (loading || !room) {
@@ -188,8 +254,22 @@ const RoomDetails = () => {
                     />
                 </div>
                 
-                <button className="w-full bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all transform hover:scale-[1.02] cursor-pointer">
-                    Check Availability
+                <button 
+                  onClick={availabilityStatus === 'available' ? handleBooking : handleCheckAvailability}
+                  disabled={availabilityStatus === 'checking' || availabilityStatus === 'unavailable'}
+                  className={`w-full text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all transform hover:scale-[1.02] cursor-pointer
+                    ${availabilityStatus === 'available' 
+                        ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700' 
+                        : availabilityStatus === 'unavailable'
+                        ? 'bg-gray-400 cursor-not-allowed hover:scale-100'
+                        : 'bg-gradient-to-r from-indigo-500 to-indigo-600'
+                    }
+                  `}
+                >
+                    {availabilityStatus === 'checking' ? 'Checking...' : 
+                     availabilityStatus === 'available' ? 'Book Now' : 
+                     availabilityStatus === 'unavailable' ? 'Not Available' :
+                     'Check Availability'}
                 </button>
 
                  <div className="mt-4 flex justify-between text-gray-600 font-medium">
