@@ -1,29 +1,77 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { roomsDummyData } from '../assets/assets';
+import axios from "axios";
+import {createContext, useContext, useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
+import {useUser, useAuth} from "@clerk/clerk-react";
+import {toast} from "react-hot-toast";
 
-export const AppContext = createContext();
 
-const AppContextProvider = (props) => {
-    const [rooms, setRooms] = useState([]);
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
+const AppContext = createContext();
+
+
+
+export const AppContextProvider = ({ children }) => {
+
+    const currency = import.meta.env.VITE_CURRENCY || "$";
+    const navigate = useNavigate();
+    const {user} = useUser();
+    const {getToken} = useAuth();
+
+    const [isOwner, setIsOwner] = useState(false);
+    const [showHotelReg, setShowHotelReg] = useState(false);
+    const [searchedCities, setSearchedCities] = useState([]);
+
+
+
+    const fetchUser = async () => {
+        try {
+            const {data} =  await axios.get("/api/user",
+                {headers:{Authorization: `Bearer ${await getToken()}`}});
+            if(data.success){
+                setIsOwner(data.role === "hotelOwner");
+                setSearchedCities(data.recentSearchedCities);
+            }
+            else{
+                //retry
+                setTimeout(() => {
+                    fetchUser();
+                }, 5000);
+            }
+        } catch (error) {
+            // Silently handle auth errors (401) - user is not logged in
+            if (error.response?.status !== 401) {
+                toast.error(error.message);
+            }
+        }
+    }
     useEffect(() => {
-        setRooms(roomsDummyData);
-    }, []);
+        if (user) {
+            fetchUser();
+        }
+    }, [user]);
 
-    const addRoom = (newRoom) => {
-        setRooms(prev => [...prev, { ...newRoom, _id: `rm_${Date.now()}`, createdAt: new Date().toISOString() }]);
-    };
 
-    const value = {
-        rooms,
-        addRoom
-    };
-
+    const value = {   
+        currency,
+        navigate,
+        user,
+        getToken,
+        isOwner,
+        setIsOwner,
+        axios,
+        showHotelReg,
+        setShowHotelReg,
+        searchedCities,
+        setSearchedCities
+    }
     return (
         <AppContext.Provider value={value}>
-            {props.children}
+            {children}
         </AppContext.Provider>
     );
 };
 
-export default AppContextProvider;
+export const useAppContext = () => {
+    return useContext(AppContext);
+}

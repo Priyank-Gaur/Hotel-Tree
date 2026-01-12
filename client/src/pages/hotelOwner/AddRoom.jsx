@@ -1,11 +1,13 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { assets, facilityIcons } from '../../assets/assets'
-import { AppContext } from '../../context/AppContext'
+import { useAppContext } from '../../context/AppContext'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const AddRoom = () => {
-  const { addRoom } = useContext(AppContext);
+  const { axios, getToken } = useAppContext();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [images, setImages] = useState([null, null, null, null]);
   const [data, setData] = useState({
@@ -37,21 +39,50 @@ const AddRoom = () => {
       });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
       e.preventDefault();
-      // In a real app, we would upload images here. For now, we use local URLs or placeholders if null
-      const processedImages = images.map(img => img ? URL.createObjectURL(img) : null).filter(Boolean);
       
-      const newRoom = {
-          roomType: data.roomType,
-          pricePerNight: Number(data.price),
-          amenities: data.amenities,
-          images: processedImages.length > 0 ? processedImages : [assets.roomImg1], // Fallback image
-          isAvailable: true
-      };
+      // Validate at least one image
+      const validImages = images.filter(img => img !== null);
+      if (validImages.length === 0) {
+          toast.error('Please upload at least one room image');
+          return;
+      }
 
-      addRoom(newRoom);
-      navigate('/owner/list-room');
+      setLoading(true);
+      
+      try {
+          const formData = new FormData();
+          
+          // Append images
+          validImages.forEach(image => {
+              formData.append('images', image);
+          });
+          
+          // Append other data
+          formData.append('roomType', data.roomType);
+          formData.append('pricePerNight', data.price);
+          formData.append('amenities', JSON.stringify(data.amenities));
+
+          const token = await getToken();
+          const response = await axios.post('/api/room', formData, {
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+
+          if (response.data.success) {
+              toast.success(response.data.message);
+              navigate('/owner/list-room');
+          } else {
+              toast.error(response.data.message);
+          }
+      } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+      } finally {
+          setLoading(false);
+      }
   };
 
   return (
@@ -139,8 +170,12 @@ const AddRoom = () => {
                 </div>
             </div>
 
-            <button type="submit" className="bg-blue-600 text-white rounded py-2.5 font-medium hover:bg-blue-700 transition-colors mt-2">
-                ADD ROOM
+            <button 
+                type="submit" 
+                disabled={loading}
+                className="bg-blue-600 text-white rounded py-2.5 font-medium hover:bg-blue-700 transition-colors mt-2 disabled:bg-blue-400 disabled:cursor-not-allowed"
+            >
+                {loading ? 'Adding Room...' : 'ADD ROOM'}
             </button>
 
         </form>

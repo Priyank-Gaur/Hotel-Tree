@@ -1,5 +1,6 @@
 import React from "react";
 import Hero from "../components/Hero";
+import RecommendedDestinations from "../components/RecommendedDestinations";
 import FeaturedDestination from "../components/FeaturedDestination";
 import ExclusiveOffers from "../components/ExclusiveOffers";
 import Testimonial from "../components/Testimonial";
@@ -12,6 +13,7 @@ const Home = () => {
   return (
     <>
       <Hero setShowRegModal={setShowRegModal} />
+      <RecommendedDestinations />
       <FeaturedDestination/>
       <ExclusiveOffers />
       <Testimonial/>

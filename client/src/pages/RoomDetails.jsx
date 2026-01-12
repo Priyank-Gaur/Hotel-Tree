@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { roomsDummyData, facilityIcons, assets, roomCommonData } from "../assets/assets";
+import { facilityIcons, assets, roomCommonData } from "../assets/assets";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const RoomDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { axios } = useAppContext();
   const [room, setRoom] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // Booking details state
   const [checkIn, setCheckIn] = useState("");
@@ -15,15 +19,29 @@ const RoomDetails = () => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    const foundRoom = roomsDummyData.find((r) => r._id === id);
-    if (foundRoom) {
-      setRoom(foundRoom);
-      setSelectedImage(foundRoom.images[0]);
-      setTotalPrice(foundRoom.pricePerNight);
-    } else {
-      // Handle room not found, maybe navigate back or show error
-      // navigate("/rooms"); 
-    }
+    const fetchRoom = async () => {
+      try {
+        const response = await axios.get('/api/room');
+        if (response.data.success) {
+          const foundRoom = response.data.rooms.find((r) => r._id === id);
+          if (foundRoom) {
+            setRoom(foundRoom);
+            setSelectedImage(foundRoom.images[0]);
+            setTotalPrice(foundRoom.pricePerNight);
+          } else {
+            toast.error('Room not found');
+            navigate('/rooms');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching room:', error);
+        toast.error('Failed to load room details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoom();
   }, [id, navigate]);
 
   useEffect(() => {
@@ -42,8 +60,8 @@ const RoomDetails = () => {
   }, [checkIn, checkOut, room]);
 
 
-  if (!room) {
-    return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  if (loading || !room) {
+    return <div className="h-screen flex items-center justify-center">Loading room details...</div>;
   }
 
   return (

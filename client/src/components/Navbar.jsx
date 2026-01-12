@@ -2,6 +2,7 @@ import React, {useEffect,useState} from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
 import { useClerk, useUser, UserButton } from "@clerk/clerk-react";
+import { useAppContext } from '../context/AppContext';
 
 const BookIcon = ()=>(
     <svg className="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" >
@@ -20,9 +21,9 @@ const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {openSignIn} = useClerk();
-    const {user} = useUser();
-    const navigate = useNavigate();
+
     const location = useLocation();
+    const {user, navigate, isOwner, setShowHotelReg} = useAppContext();
 
     useEffect(() => {
 
@@ -66,12 +67,11 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
-                    <button 
+                    {user &&  <button 
                         className={`px-5 py-2 text-xs font-semibold uppercase tracking-wider rounded-full border transition-all ${isScrolled ? 'border-gray-300 text-gray-800 hover:bg-gray-50' : 'border-white/50 text-white hover:bg-white/10'}`} 
-                        onClick={()=>navigate('/owner')}
-                    >
-                        Dashboard
-                    </button>
+                        onClick={()=>isOwner ? navigate('/owner') : setShowHotelReg(true)}>
+                        {isOwner ? "Dashboard" : 'List your Hotel'}
+                    </button>}
                 </div>
 
                 {/* Desktop Right */}
@@ -143,12 +143,9 @@ const Navbar = () => {
                    <div className="mt-auto flex flex-col gap-4">
                         {user && <button 
                             className="w-full py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors" 
-                            onClick={()=>{
-                                navigate('/owner');
-                                setIsMenuOpen(false);
-                            }}
+                            onClick={()=>isOwner ? navigate('/owner') : setShowHotelReg(true)}
                         >
-                            Owner Dashboard
+                            {isOwner ? "Dashboard" : 'List your Hotel'}
                         </button>}
 
                         {!user &&<button 

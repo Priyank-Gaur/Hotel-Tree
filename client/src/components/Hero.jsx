@@ -1,8 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import heroImage from "../assets/heroImage.png";
 import { assets, cities } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 
 const Hero = ({ setShowRegModal }) => {
+  const navigate = useNavigate();
+  const { axios, getToken, user, setSearchedCities } = useAppContext();
+  const [searchData, setSearchData] = useState({
+    destination: "",
+    checkIn: "",
+    checkOut: "",
+    guests: 2
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Save searched city to user profile if logged in
+    if (user && searchData.destination) {
+      try {
+        const token = await getToken();
+        const response = await axios.post('/api/user/store-recent-search', 
+          { recentSearchedCity: searchData.destination },
+          { headers: { Authorization: `Bearer ${token}` }}
+        );
+        
+        if (response.data.success) {
+          // Update local state to immediately show in recommendations
+          setSearchedCities(prev => {
+            const updated = [...prev];
+            if (!updated.includes(searchData.destination)) {
+              if (updated.length >= 3) {
+                updated.shift();
+              }
+              updated.push(searchData.destination);
+            }
+            return updated;
+          });
+        }
+      } catch (error) {
+        console.error('Error saving search:', error);
+      }
+    }
+    
+    // Create URL search params
+    const params = new URLSearchParams();
+    if (searchData.destination) params.append('city', searchData.destination);
+    if (searchData.checkIn) params.append('checkIn', searchData.checkIn);
+    if (searchData.checkOut) params.append('checkOut', searchData.checkOut);
+    if (searchData.guests) params.append('guests', searchData.guests);
+    
+    // Navigate to rooms page with search parameters
+    navigate(`/rooms?${params.toString()}`);
+  };
+
   return (
     <div className="relative h-screen w-full overflow-hidden">
         {/* Background Image with Zoom Effect */}
@@ -33,7 +85,7 @@ const Hero = ({ setShowRegModal }) => {
             </div>
 
             {/* Glassmorphism Search Bar */}
-            <form className="w-full max-w-5xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row gap-4 animate-fade-in-up delay-100">
+            <form onSubmit={handleSubmit} className="w-full max-w-5xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row gap-4 animate-fade-in-up delay-100">
                 
                 {/* Destination */}
                 <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
@@ -45,6 +97,8 @@ const Hero = ({ setShowRegModal }) => {
                         list="destinations"
                         id="destinationInput"
                         type="text"
+                        value={searchData.destination}
+                        onChange={(e) => setSearchData({...searchData, destination: e.target.value})}
                         className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
                         placeholder="Where to?"
                         required
@@ -65,6 +119,8 @@ const Hero = ({ setShowRegModal }) => {
                     <input
                         id="checkIn"
                         type="date"
+                        value={searchData.checkIn}
+                        onChange={(e) => setSearchData({...searchData, checkIn: e.target.value})}
                         className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium [&::-webkit-calendar-picker-indicator]:invert"
                     />
                 </div>
@@ -78,6 +134,8 @@ const Hero = ({ setShowRegModal }) => {
                     <input
                         id="checkOut"
                         type="date"
+                        value={searchData.checkOut}
+                        onChange={(e) => setSearchData({...searchData, checkOut: e.target.value})}
                         className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium [&::-webkit-calendar-picker-indicator]:invert"
                     />
                 </div>
@@ -93,13 +151,15 @@ const Hero = ({ setShowRegModal }) => {
                         max={10}
                         id="guests"
                         type="number"
+                        value={searchData.guests}
+                        onChange={(e) => setSearchData({...searchData, guests: e.target.value})}
                         className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
                         placeholder="2"
                     />
                 </div>
 
                 {/* Search Button */}
-                <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 font-semibold text-lg transition-all shadow-lg hover:shadow-blue-600/50 flex items-center justify-center gap-2">
+                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 font-semibold text-lg transition-all shadow-lg hover:shadow-blue-600/50 flex items-center justify-center gap-2">
                     <img src={assets.searchIcon} alt="" className="w-5 h-5 invert" />
                     Search
                 </button>

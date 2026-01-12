@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { assets, roomsDummyData } from "../assets/assets";
+import { assets } from "../assets/assets";
 import HotelCard from "../components/HotelCard";
+import { useAppContext } from "../context/AppContext";
+import { useSearchParams } from "react-router-dom";
 
 const AllRooms = () => {
+  const { axios } = useAppContext();
+  const [searchParams] = useSearchParams();
   const [rooms, setRooms] = useState([]);
   const [filterRooms, setFilterRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Filter States
   const [priceRange, setPriceRange] = useState([0, 1000]); // [min, max]
@@ -12,14 +17,43 @@ const AllRooms = () => {
   const [selectedRoomTypes, setSelectedRoomTypes] = useState([]);
   const [showFilters, setShowFilters] = useState(false); // Mobile filter toggle
 
-  // Extract unique amenities and room types
-  const allAmenities = [...new Set(roomsDummyData.flatMap((room) => room.amenities))];
-  const allRoomTypes = [...new Set(roomsDummyData.map((room) => room.roomType))];
+  // Get search params from URL
+  const cityParam = searchParams.get('city');
+  const checkInParam = searchParams.get('checkIn');
+  const checkOutParam = searchParams.get('checkOut');
+  const guestsParam = searchParams.get('guests');
 
+  // Extract unique amenities and room types from fetched rooms
+  const allAmenities = [...new Set(rooms.flatMap((room) => room.amenities || []))];
+  const allRoomTypes = [...new Set(rooms.map((room) => room.roomType))];
+
+  // Fetch rooms from backend
   useEffect(() => {
-    setRooms(roomsDummyData);
-    setFilterRooms(roomsDummyData);
-  }, []);
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get('/api/room');
+        if (response.data.success) {
+          let fetchedRooms = response.data.rooms;
+          
+          // Filter by city if provided in search params
+          if (cityParam) {
+            fetchedRooms = fetchedRooms.filter(room => 
+              room.hotel?.city?.toLowerCase() === cityParam.toLowerCase()
+            );
+          }
+          
+          setRooms(fetchedRooms);
+          setFilterRooms(fetchedRooms);
+        }
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchRooms();
+  }, [cityParam]);
 
   // Apply filters
   useEffect(() => {
@@ -60,6 +94,14 @@ const AllRooms = () => {
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-500">Loading rooms...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col md:flex-row gap-8 px-6 md:px-16 lg:px-24 py-10 pt-32 min-h-screen bg-gray-50/50">
@@ -135,7 +177,17 @@ const AllRooms = () => {
       {/* Room Grid */}
       <div className="flex-1">
         <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold font-playfair">All Rooms</h2>
+            <div>
+              <h2 className="text-2xl font-bold font-playfair">
+                {cityParam ? `Rooms in ${cityParam}` : 'All Rooms'}
+              </h2>
+              {cityParam && (
+                <p className="text-sm text-gray-500 mt-1">
+                  {checkInParam && checkOutParam && `${checkInParam} - ${checkOutParam}`}
+                  {guestsParam && ` • ${guestsParam} guest${guestsParam > 1 ? 's' : ''}`}
+                </p>
+              )}
+            </div>
             <p className="text-gray-500 text-sm">Showing {filterRooms.length} results</p>
         </div>
         

@@ -53,7 +53,7 @@ export const getRooms = async (req, res) => {
 //API to get all rooms of a specific hotel
 export const getOwnerRooms = async (req, res) => {
     try {
-        const hotelData = await Hotel({owner : req.auth.userId})
+        const hotelData = await Hotel.findOne({owner : req.auth.userId})
         const rooms = await Room.find({hotel : hotelData._id.toString()}).populate('hotel')
         return res.json({success : true, rooms})
     } catch (error) {
@@ -75,6 +75,15 @@ export const toggleRoomAvailability = async (req, res) => {
     }
 }
 
-
+//API to delete a room
+export const deleteRoom = async (req, res) => {
+    try {
+        const {roomId} = req.params;
+        await Room.findByIdAndDelete(roomId);
+        return res.json({success : true, message : "Room Deleted Successfully"})
+    } catch (error) {
+        return res.json({success : false, message : error.message})
+    }
+}
 
     

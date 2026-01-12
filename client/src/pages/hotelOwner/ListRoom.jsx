@@ -1,9 +1,96 @@
-import React, { useContext } from 'react'
-import { AppContext } from '../../context/AppContext'
+import React, { useEffect, useState } from 'react'
+import { useAppContext } from '../../context/AppContext'
 import { assets } from '../../assets/assets'
+import toast from 'react-hot-toast'
 
 const ListRoom = () => {
-  const { rooms } = useContext(AppContext);
+  const { axios, getToken } = useAppContext();
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRooms = async () => {
+    try {
+      const token = await getToken();
+      const response = await axios.get('/api/room/owner', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.success) {
+        setRooms(response.data.rooms);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleAvailability = async (roomId) => {
+    try {
+      const token = await getToken();
+      const response = await axios.post('/api/room/toggle-availability', 
+        { roomId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setRooms(rooms.map(room => 
+          room._id === roomId 
+            ? { ...room, isAvailable: !room.isAvailable }
+            : room
+        ));
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  const handleDeleteRoom = async (roomId) => {
+    if (!confirm('Are you sure you want to delete this room?')) {
+      return;
+    }
+
+    try {
+      const token = await getToken();
+      const response = await axios.delete(`/api/room/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setRooms(rooms.filter(room => room._id !== roomId));
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-gray-500">Loading rooms...</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -15,7 +102,7 @@ const ListRoom = () => {
                 <p>Room Type</p>
                 <p>Price</p>
                 <p>Status</p>
-                <p>Action</p>
+                <p>Actions</p>
              </div>
 
              <div className="flex flex-col">
@@ -39,8 +126,19 @@ const ListRoom = () => {
                                 {room.isAvailable ? 'Available' : 'Booked'}
                             </span>
                         </div>
-                         <div>
-                            <button className="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
+                         <div className="flex gap-2">
+                            <button 
+                                onClick={() => handleToggleAvailability(room._id)}
+                                className="px-3 py-1.5 bg-blue-500 text-white text-xs font-medium rounded hover:bg-blue-600 transition-colors"
+                            >
+                                Availability
+                            </button>
+                            <button 
+                                onClick={() => handleDeleteRoom(room._id)}
+                                className="px-3 py-1.5 bg-red-500 text-white text-xs font-medium rounded hover:bg-red-600 transition-colors"
+                            >
+                                Delete
+                            </button>
                         </div>
                      </div>
                 ))}
