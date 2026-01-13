@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import heroImage from "../assets/heroImage.png";
-import { assets, cities } from "../assets/assets";
+import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 

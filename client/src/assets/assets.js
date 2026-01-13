@@ -73,11 +73,17 @@ export const assets={
     totalRevenueIcon,
 }
 
-export const cities=[
-    "Paris",
-    "Tokyo",
-    "Berlin",
-    "Sydney",
+export const cities = [
+    "Bangkok", "Paris", "London", "Dubai", "Singapore", "Kuala Lumpur", "New York", "Istanbul", "Tokyo", "Antalya",
+    "Seoul", "Osaka", "Makkah", "Phuket", "Pattaya", "Milan", "Barcelona", "Palma de Mallorca", "Bali", "Hong Kong",
+    "Frankfurt", "Dublin", "Taipei", "Miami", "Los Angeles", "Las Vegas", "Rome", "Prague", "Amsterdam", "Vienna",
+    "Madrid", "Berlin", "Ho Chi Minh City", "Johannesburg", "Riyadh", "Doha", "Beijing", "Sydney", "Cairo", "Florence",
+    "Lisbon", "Moscow", "Athens", "Venice", "Orlando", "Shanghai", "Toronto", "Vancouver", "San Francisco", "Chicago",
+    "Munich", "Budapest", "St. Petersburg", "Warsaw", "Cancun", "Mumbai", "Delhi", "Jaipur", "Agra", "Chennai",
+    "Kolkata", "Bengaluru", "Hyderabad", "Goa", "Pune", "Udaipur", "Shimla", "Manali", "Darjeeling", "Gangtok",
+    "Varanasi", "Rishikesh", "Haridwar", "Amritsar", "Chandigarh", "Mysore", "Ooty", "Kochi", "Munnar", "Alleppey",
+    "Thiruvananthapuram", "Colombo", "Kandy", "Kathmandu", "Thimphu", "Male", "Jakarta", "Hanoi", "Manila", "Yangon",
+    "Phnom Penh", "Siem Reap", "Vientiane", "Luang Prabang", "Chiang Mai", "Krabi", "Samui", "Langley", "Queenstown", "Auckland"
 ]
 
 // Exclusive Offers

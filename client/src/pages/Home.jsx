@@ -30,7 +30,7 @@ const Home = () => {
       <FeaturedDestination/>
       <ExclusiveOffers />
       <Testimonial/>
-      <Newsletter/>
+      {/* <Newsletter/> */}
       {showRegModal && <HotelReg setShowRegModal={setShowRegModal} />}
     </>
   );
