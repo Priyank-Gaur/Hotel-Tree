@@ -68,7 +68,7 @@ export const createBooking = async (req, res) => {
             <ul>
             <li>Booking ID : ${booking._id}</li>
             <li>Booking Date : ${booking.createdAt}</li>
-            <li>Booking Status : ${booking.status}</li>
+            <li>Payment Status : ${booking.paymentStatus}</li>
             <li>Booking Check In Date : ${booking.checkInDate}</li>
             <li>Booking Check Out Date : ${booking.checkOutDate}</li>
             <li>Booking Guests : ${booking.guests}</li>
