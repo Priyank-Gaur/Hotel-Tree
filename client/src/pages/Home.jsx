@@ -5,7 +5,7 @@ import RecommendedDestinations from "../components/RecommendedDestinations";
 import FeaturedDestination from "../components/FeaturedDestination";
 import ExclusiveOffers from "../components/ExclusiveOffers";
 import Testimonial from "../components/Testimonial";
-import Newsletter from "../components/Newsletter";
+import Newsletter from "../components/NewsLetter";
 import HotelReg from "../components/HotelReg";
 
 const Home = () => {
