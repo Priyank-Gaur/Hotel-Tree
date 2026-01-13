@@ -6,31 +6,60 @@ import toast from "react-hot-toast";
 
 const MyBookings = () => {
     const navigate = useNavigate();
-    const { axios, getToken, user } = useAppContext();
+    const { axios, getToken, user, userDataLoaded } = useAppContext();
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
+  const fetchBookings = async () => {
+    try {
+        const token = await getToken();
+        // If no token (not logged in), don't fetch
+        if (!token) return; 
+
+        const response = await axios.get('/api/booking/user',
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if(response.data.success){
+            setBookings(response.data.bookings);
+        }
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        toast.error("Failed to fetch bookings");
+    } finally {
+        setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    const fetchBookings = async () => {
-        try {
-            const token = await getToken();
-            const response = await axios.get('/api/booking/user',
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            if(response.data.success){
-                setBookings(response.data.bookings);
-            }
-        } catch (error) {
-            console.error("Error fetching bookings:", error);
-            toast.error("Failed to fetch bookings");
-        } finally {
+    if (userDataLoaded) {
+        if(user){
+            fetchBookings();
+        } else {
+            // User not logged in, stop loading and redirect or show empty
             setLoading(false);
+            navigate('/'); 
         }
     }
-    if(user){
-        fetchBookings();
+  }, [user, userDataLoaded]);
+
+  const cancelBooking = async (bookingId) => {
+    try {
+        const token = await getToken();
+        const response = await axios.post('/api/booking/cancel', 
+            { bookingId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if(response.data.success) {
+            toast.success("Booking Cancelled");
+            fetchBookings();
+        } else {
+            toast.error(response.data.message);
+        }
+    } catch (error) {
+        console.error("Error cancelling booking:", error);
+        toast.error("Failed to cancel booking");
     }
-  }, [user]);
+  }
 
   if(loading){
       return <div className="h-screen flex items-center justify-center">Loading bookings...</div>;
@@ -47,23 +76,31 @@ const MyBookings = () => {
             className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow"
           >
             {/* Image */}
-            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 cursor-pointer" onClick={() => navigate(`/rooms/${booking.room._id}`)}>
-              <img
-                src={booking.room.images[0]}
-                alt={booking.hotel.name}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 cursor-pointer" 
+                onClick={() => booking.room && navigate(`/rooms/${booking.room._id}`)}>
+              {booking.room?.images?.[0] ? (
+                  <img
+                    src={booking.room.images[0]}
+                    alt={booking.hotel?.name || "Hotel"}
+                    className="w-full h-full object-cover"
+                  />
+              ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                      No Image
+                  </div>
+              )}
             </div>
 
             {/* Details */}
             <div className="flex-1">
               <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:underline" onClick={() => navigate(`/rooms/${booking.room._id}`)}>
-                    {booking.hotel.name}
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1 cursor-pointer hover:underline" 
+                        onClick={() => booking.room && navigate(`/rooms/${booking.room._id}`)}>
+                    {booking.hotel?.name || "Unknown Hotel"}
                     </h3>
                     <p className="text-gray-500 text-sm mb-3">
-                    {booking.hotel.city}
+                    {booking.hotel?.city || "Unknown City"}
                     </p>
                   </div>
                  <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
@@ -86,7 +123,7 @@ const MyBookings = () => {
                   </div>
                    <div className="flex flex-col">
                       <span className="text-gray-500 text-xs uppercase font-semibold">Room Type</span>
-                       <span>{booking.room?.roomType || 'Standard Room'}</span>
+                       <span>{booking.room?.roomType || 'Unavailable Room'}</span>
                   </div>
                    <div className="flex flex-col">
                       <span className="text-gray-500 text-xs uppercase font-semibold">Guests</span>
@@ -108,21 +145,21 @@ const MyBookings = () => {
             
             {/* Actions */}
             <div className="flex flex-row md:flex-col gap-3 justify-center md:border-l md:border-gray-200 md:pl-6">
-                 <button 
-                  onClick={() => navigate(`/rooms/${booking.room._id}`)}
-                 className="flex-1 px-4 py-2 border border-indigo-500 text-indigo-600 rounded text-sm hover:bg-indigo-50 transition-colors whitespace-nowrap">
-                     View Details
-                 </button>
+                 {booking.room && (
+                    <button 
+                    onClick={() => navigate(`/rooms/${booking.room._id}`)}
+                    className="flex-1 px-4 py-2 border border-indigo-500 text-indigo-600 rounded text-sm hover:bg-indigo-50 transition-colors whitespace-nowrap">
+                        View Details
+                    </button>
+                 )}
                  {booking.status === 'pending' && 
-                    <button className="flex-1 px-4 py-2 border border-red-500 text-red-600 rounded text-sm hover:bg-red-50 transition-colors whitespace-nowrap">
+                    <button 
+                        onClick={() => cancelBooking(booking._id)}
+                        className="flex-1 px-4 py-2 border border-red-500 text-red-600 rounded text-sm hover:bg-red-50 transition-colors whitespace-nowrap">
                         Cancel
                     </button>
                  }
-                 {!booking.isPaid && 
-                    <button className="flex-1 px-4 py-2 bg-indigo-500 text-white rounded text-sm hover:bg-indigo-600 transition-colors whitespace-nowrap">
-                        Pay Now
-                    </button>
-                 }
+
             </div>
           </div>
         ))}

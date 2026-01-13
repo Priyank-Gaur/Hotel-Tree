@@ -13,9 +13,9 @@ const BookIcon = ()=>(
 const Navbar = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Hotels', path: '/rooms' },
-        { name: 'Experience', path: '/' },
-        { name: 'About', path: '/' },
+        { name: 'Hotels', path: '/hotels' },
+        { name: 'Offers', path: '/' },
+        // { name: 'About', path: '/' },
     ];
 
     const [isScrolled, setIsScrolled] = useState(false);
@@ -48,7 +48,7 @@ const Navbar = () => {
             <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 transition-all duration-300 z-50 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-6"}`}>
 
                 {/* Logo */}
-                <Link to ='/'>
+                <Link to='/'>
                     <img 
                         src={assets.logo} 
                         alt="logo" 
@@ -57,30 +57,34 @@ const Navbar = () => {
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
                     {navLinks.map((link, i) => (
                         <Link 
                             key={i} 
-                            to={link.path} 
+                            to={link.path}
+                            onClick={(e) => {
+                                if (link.name === "Offers") {
+                                    e.preventDefault();
+                                    if (location.pathname !== '/') {
+                                        navigate('/', { state: { scrollTo: 'exclusive-offers' } });
+                                    } else {
+                                        const element = document.getElementById('exclusive-offers');
+                                        if (element) {
+                                            element.scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                    }
+                                }
+                            }}
                             className={`text-sm font-medium tracking-wide hover:opacity-70 transition-opacity ${isScrolled ? "text-gray-800" : "text-white"}`}
                         >
                             {link.name}
                         </Link>
                     ))}
-                    {user &&  <button 
-                        className={`px-5 py-2 text-xs font-semibold uppercase tracking-wider rounded-full border transition-all ${isScrolled ? 'border-gray-300 text-gray-800 hover:bg-gray-50' : 'border-white/50 text-white hover:bg-white/10'}`} 
-                        onClick={()=>isOwner ? navigate('/owner') : setShowHotelReg(true)}>
-                        {isOwner ? "Dashboard" : 'List your Hotel'}
-                    </button>}
+
                 </div>
 
                 {/* Desktop Right */}
                 <div className="hidden md:flex items-center gap-6">
-                    <img 
-                        src={assets.searchIcon} 
-                        alt="search" 
-                        className={`w-5 h-5 cursor-pointer transition-all ${isScrolled ? "opacity-60" : "invert opacity-100"}`} 
-                    />
                     
                     {user ?
                     (<UserButton afterSignOutUrl="/">
@@ -89,12 +93,20 @@ const Navbar = () => {
                         </UserButton.MenuItems>
                     </UserButton>) 
                     :
-                    (<button 
-                        onClick={openSignIn} 
-                        className={`px-6 py-2 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-xl ${isScrolled ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-white text-blue-900 hover:bg-gray-100"}`}
-                    >
-                        Login
-                    </button>)  
+                    (<div className="flex items-center gap-4">
+                        <button 
+                            onClick={()=>openSignIn({forceRedirectUrl: '/owner'})}
+                            className={`text-sm font-medium hover:opacity-70 transition-opacity ${isScrolled ? "text-gray-800" : "text-white"}`}
+                        >
+                            Owner Login
+                        </button>
+                        <button 
+                            onClick={()=>openSignIn({forceRedirectUrl: '/'})} 
+                            className={`px-6 py-2 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-xl ${isScrolled ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-white text-blue-900 hover:bg-gray-100"}`}
+                        >
+                            Login
+                        </button>
+                    </div>)  
                      }
                 </div>
 
@@ -141,22 +153,35 @@ const Navbar = () => {
                     </div>
 
                    <div className="mt-auto flex flex-col gap-4">
-                        {user && <button 
+                        {user && isOwner && <button 
                             className="w-full py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors" 
-                            onClick={()=>isOwner ? navigate('/owner') : setShowHotelReg(true)}
+                            onClick={()=>navigate('/owner')}
                         >
-                            {isOwner ? "Dashboard" : 'List your Hotel'}
+                            Dashboard
                         </button>}
 
-                        {!user &&<button 
-                            onClick={()=>{
-                                openSignIn();
-                                setIsMenuOpen(false);
-                            }} 
-                            className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium shadow-md hover:bg-blue-700 transition-colors"
-                        >
-                            Login
-                        </button>}
+                        {!user && (
+                            <>
+                            <button 
+                                onClick={()=>{
+                                    openSignIn({forceRedirectUrl: '/owner'});
+                                    setIsMenuOpen(false);
+                                }} 
+                                className="w-full py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                                Owner Login
+                            </button>
+                            <button 
+                                onClick={()=>{
+                                    openSignIn({forceRedirectUrl: '/'});
+                                    setIsMenuOpen(false);
+                                }} 
+                                className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium shadow-md hover:bg-blue-700 transition-colors"
+                            >
+                                Login
+                            </button>
+                            </>
+                        )}
                    </div>
                 </div>
             </nav>

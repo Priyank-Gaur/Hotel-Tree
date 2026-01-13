@@ -115,6 +115,7 @@ const RoomDetails = () => {
           
         if(response.data.success) {
             toast.success("Booking successful!");
+            toast.success("Booking details sent to your email!");
             navigate('/my-bookings');
         } else {
             toast.error(response.data.message);
@@ -228,6 +229,7 @@ const RoomDetails = () => {
                         <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Check-In</label>
                         <input 
                             type="date" 
+                            min={new Date().toISOString().split('T')[0]}
                             className="w-full text-sm outline-none text-gray-600"
                             onChange={(e) => setCheckIn(e.target.value)}
                         />
@@ -236,6 +238,7 @@ const RoomDetails = () => {
                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Check-Out</label>
                         <input 
                             type="date" 
+                            min={checkIn || new Date().toISOString().split('T')[0]}
                             className="w-full text-sm outline-none text-gray-600"
                             onChange={(e) => setCheckOut(e.target.value)}
                         />

@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import Hero from "../components/Hero";
 import RecommendedDestinations from "../components/RecommendedDestinations";
 import FeaturedDestination from "../components/FeaturedDestination";
@@ -9,6 +10,18 @@ import HotelReg from "../components/HotelReg";
 
 const Home = () => {
   const [showRegModal, setShowRegModal] = React.useState(false);
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.state && location.state.scrollTo) {
+      const element = document.getElementById(location.state.scrollTo);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        // Clear state to prevent scroll on subsequent refreshes
+        window.history.replaceState({}, document.title);
+      }
+    }
+  }, [location]);
 
   return (
     <>

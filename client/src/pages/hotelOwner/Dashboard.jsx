@@ -28,15 +28,12 @@ const Dashboard = () => {
       });
 
       if (bookingsResponse.data.success && roomsResponse.data.success) {
-        const bookings = bookingsResponse.data.bookings || [];
+        const { bookings = [], totalRevenue = 0, totalBookings = 0 } = bookingsResponse.data.dashboardData || {};
         const rooms = roomsResponse.data.rooms || [];
         
-        // Calculate total revenue
-        const totalRevenue = bookings.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
-        
         setDashboardData({
-          totalBookings: bookings.length,
-          totalRevenue: totalRevenue,
+          totalBookings,
+          totalRevenue,
           totalRooms: rooms.length,
           bookings: bookings.slice(0, 5) // Show only recent 5 bookings
         });

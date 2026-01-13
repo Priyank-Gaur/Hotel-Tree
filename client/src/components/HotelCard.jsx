@@ -28,6 +28,11 @@ bg-white text-gray-800 font-medium rounded-full"
           <img src={assets.starIconFilled} alt="star-icon" /> 4.5
         </div>
         </div> 
+        <div className="mt-2 mb-2">
+            <span className="inline-block px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-md">
+                {room.roomType}
+            </span>
+        </div>
         <div className="flex items-center gap-1 text-sm">
           <img src={assets.locationIcon} alt="location-icon" />
           <span>{room.hotel.address}</span>

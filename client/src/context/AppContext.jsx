@@ -15,7 +15,8 @@ export const AppContextProvider = ({ children }) => {
 
     const currency = import.meta.env.VITE_CURRENCY || "$";
     const navigate = useNavigate();
-    const {user} = useUser();
+    const [userDataLoaded, setUserDataLoaded] = useState(false);
+    const {user, isLoaded} = useUser();
     const {getToken} = useAuth();
 
     const [isOwner, setIsOwner] = useState(false);
@@ -43,13 +44,20 @@ export const AppContextProvider = ({ children }) => {
             if (error.response?.status !== 401) {
                 toast.error(error.message);
             }
+        } finally {
+            setUserDataLoaded(true);
         }
     }
     useEffect(() => {
+        if (!isLoaded) return;
+
         if (user) {
             fetchUser();
+        } else {
+            // User is not logged in (and Clerk is done loading), so we are done
+            setUserDataLoaded(true); 
         }
-    }, [user]);
+    }, [user, isLoaded]);
 
 
     const value = {   
@@ -63,7 +71,8 @@ export const AppContextProvider = ({ children }) => {
         showHotelReg,
         setShowHotelReg,
         searchedCities,
-        setSearchedCities
+        setSearchedCities,
+        userDataLoaded
     }
     return (
         <AppContext.Provider value={value}>

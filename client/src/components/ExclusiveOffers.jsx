@@ -4,7 +4,7 @@ import Title from "./Title";
 
 const ExclusiveOffers = () => {
   return (
-    <div className="mx-6 md:mx-16 lg:mx-24 my-20">
+    <div id="exclusive-offers" className="mx-6 md:mx-16 lg:mx-24 my-20">
        <Title
         title="Exclusive Offers"
         subTitle="Unbeatable Deals for Your Next Dream Vacation"
@@ -34,7 +34,7 @@ const ExclusiveOffers = () => {
                 {offer.description}
               </p>
               <button className="bg-white text-gray-900 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition-colors">
-                Book Now
+                Coming soon
               </button>
             </div>
           </div>

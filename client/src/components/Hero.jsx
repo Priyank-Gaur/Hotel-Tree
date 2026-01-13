@@ -7,38 +7,32 @@ import { useAppContext } from "../context/AppContext";
 const Hero = ({ setShowRegModal }) => {
   const navigate = useNavigate();
   const { axios, getToken, user, setSearchedCities } = useAppContext();
-  const [searchData, setSearchData] = useState({
-    destination: "",
-    checkIn: "",
-    checkOut: "",
-    guests: 2
-  });
+  const [destination, setDestination] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Save searched city to user profile if logged in
-    if (user && searchData.destination) {
+    if (user && destination) {
       try {
         const token = await getToken();
-        const response = await axios.post('/api/user/store-recent-search', 
-          { recentSearchedCity: searchData.destination },
+        // Fire and forget, don't await response to speed up navigation
+        axios.post('/api/user/store-recent-search', 
+          { recentSearchedCity: destination },
           { headers: { Authorization: `Bearer ${token}` }}
         );
         
-        if (response.data.success) {
-          // Update local state to immediately show in recommendations
-          setSearchedCities(prev => {
-            const updated = [...prev];
-            if (!updated.includes(searchData.destination)) {
-              if (updated.length >= 3) {
-                updated.shift();
-              }
-              updated.push(searchData.destination);
+        // Update local state to immediately show in recommendations
+        setSearchedCities(prev => {
+          const updated = [...prev];
+          if (!updated.includes(destination)) {
+            if (updated.length >= 3) {
+              updated.shift();
             }
-            return updated;
-          });
-        }
+            updated.push(destination);
+          }
+          return updated;
+        });
       } catch (error) {
         console.error('Error saving search:', error);
       }
@@ -46,13 +40,10 @@ const Hero = ({ setShowRegModal }) => {
     
     // Create URL search params
     const params = new URLSearchParams();
-    if (searchData.destination) params.append('city', searchData.destination);
-    if (searchData.checkIn) params.append('checkIn', searchData.checkIn);
-    if (searchData.checkOut) params.append('checkOut', searchData.checkOut);
-    if (searchData.guests) params.append('guests', searchData.guests);
+    if (destination) params.append('city', destination);
     
-    // Navigate to rooms page with search parameters
-    navigate(`/rooms?${params.toString()}`);
+    // Navigate to hotels page with search parameters
+    navigate(`/hotels?${params.toString()}`);
   };
 
   return (
@@ -85,7 +76,7 @@ const Hero = ({ setShowRegModal }) => {
             </div>
 
             {/* Glassmorphism Search Bar */}
-            <form onSubmit={handleSubmit} className="w-full max-w-5xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row gap-4 animate-fade-in-up delay-100">
+            <form onSubmit={handleSubmit} className="w-full max-w-3xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-3 md:p-4 shadow-2xl flex flex-col md:flex-row gap-3 animate-fade-in-up delay-100">
                 
                 {/* Destination */}
                 <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
@@ -94,83 +85,22 @@ const Hero = ({ setShowRegModal }) => {
                         <label htmlFor="destinationInput" className="text-xs font-medium uppercase tracking-wider text-gray-300">Destination</label>
                     </div>
                     <input
-                        list="destinations"
                         id="destinationInput"
                         type="text"
-                        value={searchData.destination}
-                        onChange={(e) => setSearchData({...searchData, destination: e.target.value})}
+                        value={destination}
+                        onChange={(e) => setDestination(e.target.value)}
                         className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
                         placeholder="Where to?"
                         required
                     />
-                    <datalist id="destinations">
-                        {cities.map((city, index) => (
-                            <option value={city} key={index} />
-                        ))}
-                    </datalist>
-                </div>
-
-                {/* Check In */}
-                <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
-                     <div className="flex items-center gap-3 mb-1">
-                        <img src={assets.calenderIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
-                        <label htmlFor="checkIn" className="text-xs font-medium uppercase tracking-wider text-gray-300">Check In</label>
-                    </div>
-                    <input
-                        id="checkIn"
-                        type="date"
-                        value={searchData.checkIn}
-                        onChange={(e) => setSearchData({...searchData, checkIn: e.target.value})}
-                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium [&::-webkit-calendar-picker-indicator]:invert"
-                    />
-                </div>
-
-                 {/* Check Out */}
-                 <div className="flex-1 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
-                     <div className="flex items-center gap-3 mb-1">
-                        <img src={assets.calenderIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
-                        <label htmlFor="checkOut" className="text-xs font-medium uppercase tracking-wider text-gray-300">Check Out</label>
-                    </div>
-                    <input
-                        id="checkOut"
-                        type="date"
-                        value={searchData.checkOut}
-                        onChange={(e) => setSearchData({...searchData, checkOut: e.target.value})}
-                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium [&::-webkit-calendar-picker-indicator]:invert"
-                    />
-                </div>
-
-                {/* Guests */}
-                <div className="w-32 bg-white/10 rounded-xl px-4 py-3 border border-white/10 hover:bg-white/20 transition-colors group">
-                     <div className="flex items-center gap-3 mb-1">
-                        <img src={assets.userIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
-                        <label htmlFor="guests" className="text-xs font-medium uppercase tracking-wider text-gray-300">Guests</label>
-                    </div>
-                    <input
-                        min={1}
-                        max={10}
-                        id="guests"
-                        type="number"
-                        value={searchData.guests}
-                        onChange={(e) => setSearchData({...searchData, guests: e.target.value})}
-                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
-                        placeholder="2"
-                    />
                 </div>
 
                 {/* Search Button */}
-                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 font-semibold text-lg transition-all shadow-lg hover:shadow-blue-600/50 flex items-center justify-center gap-2">
+                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-12 py-3 font-semibold text-lg transition-all shadow-lg hover:shadow-blue-600/50 flex items-center justify-center gap-2">
                     <img src={assets.searchIcon} alt="" className="w-5 h-5 invert" />
                     Search
                 </button>
             </form>
-
-            <button 
-                onClick={() => setShowRegModal(true)}
-                className="mt-12 text-sm text-gray-300 hover:text-white border-b border-transparent hover:border-white transition-all pb-1"
-            >
-                Are you a property owner? List your hotel
-            </button>
         </div>
     </div>
   );
