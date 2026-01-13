@@ -137,6 +137,19 @@ hotel_booking/
 
 ---
 
+## 🔮 Future Goals & Roadmap
+
+We are constantly working to improve Hotel Tree. Here are some features we plan to implement:
+
+-   **Payment Gateway Integration**: Secure online payments using Stripe or Razorpay.
+-   **Review & Rating System**: Allow guests to leave text reviews and star ratings for hotels.
+-   **Availability Calendar**: Visual calendar to view room availability across dates.
+-   **Admin Panel**: Comprehensive admin dashboard for platform-wide management.
+-   **Social Login**: Enhanced authentication options with Google, Facebook, etc.
+-   **Wishlist**: Ability for users to save hotels for future bookings.
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
