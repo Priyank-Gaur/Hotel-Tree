@@ -34,13 +34,13 @@ export const AppContextProvider = ({ children }) => {
                 setSearchedCities(data.recentSearchedCities);
             }
             else{
-                //retry
+                
                 setTimeout(() => {
                     fetchUser();
                 }, 5000);
             }
         } catch (error) {
-            // Silently handle auth errors (401) - user is not logged in
+            
             if (error.response?.status !== 401) {
                 toast.error(error.message);
             }
@@ -54,7 +54,7 @@ export const AppContextProvider = ({ children }) => {
         if (user) {
             fetchUser();
         } else {
-            // User is not logged in (and Clerk is done loading), so we are done
+            
             setUserDataLoaded(true); 
         }
     }, [user, isLoaded]);

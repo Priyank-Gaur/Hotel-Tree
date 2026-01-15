@@ -12,12 +12,12 @@ const RoomDetails = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Booking details state
+  
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [availabilityStatus, setAvailabilityStatus] = useState("idle"); // idle, checking, available, unavailable
+  const [availabilityStatus, setAvailabilityStatus] = useState("idle"); 
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -57,7 +57,7 @@ const RoomDetails = () => {
         } else {
              setTotalPrice(room.pricePerNight);
         }
-        // Reset availability when dates change
+        
         setAvailabilityStatus("idle");
     }
   }, [checkIn, checkOut, room]);
@@ -96,7 +96,7 @@ const RoomDetails = () => {
   const handleBooking = async () => {
     if (!user) {
       toast.error("Please login to book a room");
-      // Maybe open login modal if available, or just toast
+      
       return;
     }
     if(availabilityStatus !== 'available') return;
@@ -133,7 +133,7 @@ const RoomDetails = () => {
 
   return (
     <div className="px-6 md:px-16 lg:px-24 py-10 pt-32 min-h-screen bg-white">
-      {/* Breadcrumb / Back */}
+      {}
       <button 
         onClick={() => navigate(-1)} 
         className="flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition-colors"
@@ -143,14 +143,14 @@ const RoomDetails = () => {
       </button>
 
       <div className="flex flex-col lg:flex-row gap-12">
-        {/* Left Column: Images & Details */}
+        {}
         <div className="lg:w-2/3">
-          {/* Main Image */}
+          {}
           <div className="rounded-xl overflow-hidden shadow-md mb-4 h-[400px] md:h-[500px]">
             <img src={selectedImage} alt={room.hotel.name} className="w-full h-full object-cover" />
           </div>
 
-          {/* Thumbnails */}
+          {}
           <div className="grid grid-cols-4 gap-4 mb-8">
             {room.images.map((img, index) => (
               <div 
@@ -163,7 +163,7 @@ const RoomDetails = () => {
             ))}
           </div>
 
-          {/* Hotel Info */}
+          {}
           <h1 className="text-3xl md:text-4xl font-playfair font-bold text-gray-900 mb-2">
             {room.hotel.name}
           </h1>
@@ -182,7 +182,7 @@ const RoomDetails = () => {
                 Enjoy our state-of-the-art facilities including a spa, fitness center, and gourmet restaurants.
              </p>
              
-             {/* Highlights from roomCommonData */}
+             {}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                {roomCommonData.map((item, index) => (
                  <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
@@ -196,7 +196,7 @@ const RoomDetails = () => {
              </div>
           </div>
 
-          {/* Amenities */}
+          {}
           <div>
             <h3 className="text-xl font-semibold mb-6">What this place offers</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8">
@@ -214,7 +214,7 @@ const RoomDetails = () => {
           </div>
         </div>
 
-        {/* Right Column: Booking Widget */}
+        {}
         <div className="lg:w-1/3">
             <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 sticky top-32">
                 <div className="flex justify-between items-end mb-6">

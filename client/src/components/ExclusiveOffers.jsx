@@ -21,7 +21,7 @@ const ExclusiveOffers = () => {
               alt={offer.title}
               className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
             />
-            {/* Gradient Overlay */}
+            {}
              <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-black/90 to-transparent"></div>
 
 

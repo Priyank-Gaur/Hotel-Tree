@@ -10,14 +10,14 @@ const Hotels = () => {
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Use search param for initial value if present, otherwise empty string
+  
   const [searchTerm, setSearchTerm] = useState(searchParams.get("city") || "");
 
-  // Filter States
-  const [priceRange, setPriceRange] = useState([0, 1000]); // [min, max]
+  
+  const [priceRange, setPriceRange] = useState([0, 1000]); 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedRoomTypes, setSelectedRoomTypes] = useState([]);
-  const [showFilters, setShowFilters] = useState(false); // Mobile filter toggle
+  const [showFilters, setShowFilters] = useState(false); 
   
   const [allAmenities, setAllAmenities] = useState([]);
   const [allRoomTypes, setAllRoomTypes] = useState([]);
@@ -29,13 +29,13 @@ const Hotels = () => {
         if (response.data.success) {
           const fetchedRooms = response.data.rooms;
 
-          // Extract unique amenities and room types
+          
           const uniqueAmenities = [...new Set(fetchedRooms.flatMap((room) => room.amenities || []))];
           const uniqueRoomTypes = [...new Set(fetchedRooms.map((room) => room.roomType))];
           setAllAmenities(uniqueAmenities);
           setAllRoomTypes(uniqueRoomTypes);
           
-          // Group rooms by hotel
+          
           const hotelsMap = {};
           fetchedRooms.forEach(room => {
             if (room.hotel && room.hotel._id) {
@@ -61,7 +61,7 @@ const Hotels = () => {
     fetchRooms();
   }, [axios]);
 
-    // Update URL params when search term changes
+    
     useEffect(() => {
         if (searchTerm) {
             setSearchParams({ city: searchTerm });
@@ -72,15 +72,15 @@ const Hotels = () => {
 
 
   const filteredHotels = hotels.map(hotel => {
-    // 1. Filter Rooms based on criteria
+    
     const filteredRooms = hotel.rooms.filter(room => {
-        // Price Filter
+        
         const priceMatch = room.pricePerNight >= priceRange[0] && room.pricePerNight <= priceRange[1];
         
-        // Room Type Filter
+        
         const typeMatch = selectedRoomTypes.length === 0 || selectedRoomTypes.includes(room.roomType);
 
-        // Amenities Filter
+        
         const amenityMatch = selectedAmenities.length === 0 || selectedAmenities.every(a => room.amenities.includes(a));
 
         return priceMatch && typeMatch && amenityMatch;
@@ -88,7 +88,7 @@ const Hotels = () => {
 
     return { ...hotel, rooms: filteredRooms };
   }).filter(hotel => {
-    // 2. Filter Hotels based on Search Term AND ensure they have matching rooms
+    
     if (hotel.rooms.length === 0) return false;
 
     const cityMatch = hotel.city?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -125,7 +125,7 @@ const Hotels = () => {
   return (
     <div className="flex flex-col md:flex-row gap-8 px-6 md:px-16 lg:px-24 py-10 pt-32 min-h-screen bg-gray-50/50">
       
-         {/* Mobile Filter Toggle */}
+         {}
          <button 
         className="md:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm w-fit mb-4"
         onClick={()=>setShowFilters(!showFilters)}
@@ -134,11 +134,11 @@ const Hotels = () => {
             Filters
         </button>
 
-      {/* Sidebar Filters */}
+      {}
       <div className={`w-full md:w-1/4 min-w-[250px] bg-white p-6 rounded-lg shadow-sm h-fit ${showFilters ? 'block' : 'hidden md:block'}`}>
         <h3 className="text-lg font-semibold mb-6">Filters</h3>
 
-        {/* Price Range */}
+        {}
         <div className="mb-6">
           <h4 className="font-medium mb-3">Price Range</h4>
           <input
@@ -155,7 +155,7 @@ const Hotels = () => {
           </div>
         </div>
 
-        {/* Room Type */}
+        {}
         <div className="mb-6">
           <h4 className="font-medium mb-3">Room Type</h4>
           <div className="flex flex-col gap-2">
@@ -173,7 +173,7 @@ const Hotels = () => {
           </div>
         </div>
 
-        {/* Amenities */}
+        {}
         <div>
           <h4 className="font-medium mb-3">Amenities</h4>
           <div className="flex flex-col gap-2">
@@ -199,9 +199,9 @@ const Hotels = () => {
         </button>
       </div>
 
-      {/* Main Content */}
+      {}
       <div className="flex-1">
-        {/* Header & Search */}
+        {}
         <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
             <div>
             <h1 className="text-3xl font-playfair font-bold text-gray-900 mb-2">
@@ -226,12 +226,12 @@ const Hotels = () => {
             </div>
         </div>
 
-        {/* Hotels List */}
+        {}
         <div className="flex flex-col gap-16">
             {filteredHotels.length > 0 ? (
             filteredHotels.map(hotel => (
                 <div key={hotel._id} className="animate-fadeIn">
-                {/* Hotel Header */}
+                {}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-gray-200 pb-4">
                     <div>
                         <h2 className="text-2xl font-bold font-playfair text-gray-800 flex items-center gap-2">
@@ -247,7 +247,7 @@ const Hotels = () => {
                     </div>
                 </div>
                 
-                {/* Rooms Grid */}
+                {}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                     {hotel.rooms.map((room, idx) => (
                         <HotelCard key={room._id} room={room} index={idx} />

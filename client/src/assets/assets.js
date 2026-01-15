@@ -86,28 +86,28 @@ export const cities = [
     "Phnom Penh", "Siem Reap", "Vientiane", "Luang Prabang", "Chiang Mai", "Krabi", "Samui", "Langley", "Queenstown", "Auckland"
 ]
 
-// Exclusive Offers
+
 export const exclusiveOffers=[
     {_id:11,title:"Winter Special",description:"Stay 3 nights & pay for 2 with complimentary dinner",priceOff:35,expiryDate:"Dec 15",image:exclusiveOfferCardImg1},
     {_id:12,title:"Business Saver",description:"Special rates for business travelers with workspace",priceOff:15,expiryDate:"Nov 30",image:exclusiveOfferCardImg2},
     {_id:13,title:"Family Fiesta",description:"Kids stay free with access to family activities",priceOff:25,expiryDate:"Jan 10",image:exclusiveOfferCardImg3},
 ]
 
-// Testimonials
+
 import profile_noah from './profile_noah.png'
 import profile_ava from './profile_ava.png'
 import profile_rohan from './profile_rohan.png'
 
-// ... (existing imports)
 
-// Testimonials
+
+
 export const testimonials=[
     {id:1,name:"Noah Williams",address:"Toronto, Canada",image:profile_noah,rating:5,review:"Smooth experience from booking to checkout. Highly reliable platform."},
     {id:2,name:"Ava Müller",address:"Berlin, Germany",image:profile_ava,rating:4,review:"The hotel suggestions matched my style perfectly. Loved it!"},
     {id:3,name:"Rohan Mehta",address:"Mumbai, India",image:profile_rohan,rating:5,review:"Affordable luxury stays with excellent support. Will use again."},
 ]
 
-// Facility Icons
+
 export const facilityIcons={
     "Free WiFi":assets.freeWifiIcon,
     "Free Breakfast":assets.freeBreakfastIcon,
@@ -116,7 +116,7 @@ export const facilityIcons={
     "Pool Access":assets.poolIcon,
 }
 
-// Room Info Highlights
+
 export const roomCommonData=[
     {icon:assets.homeIcon,title:"Verified Property",description:"This property has been quality checked."},
     {icon:assets.badgeIcon,title:"Top Rated Host",description:"Consistently rated above 4.8 stars."},
@@ -124,7 +124,7 @@ export const roomCommonData=[
     {icon:assets.heartIcon,title:"Guest Favorite",description:"Frequently booked by returning guests."},
 ]
 
-// User Dummy Data
+
 export const userDummyData={
     "_id":"user_x92kd9LmPz",
     "username":"TravelGeek",
@@ -137,8 +137,8 @@ export const userDummyData={
     "recentSearchedCities":["Tokyo","Paris"]
 }
 
-// Hotel Dummy Data
-// Hotel Dummy Data
+
+
 export const hotelDummyData={
     "_id":"ht_8492kd92",
     "name":"Skyline Residency",
@@ -187,7 +187,7 @@ const hotelDummyData4 = {
     "__v":0
 }
 
-// Rooms Dummy Data
+
 export const roomsDummyData=[
     {_id:"rm_101",hotel:hotelDummyData,roomType:"Luxury Suite",pricePerNight:499,amenities:["Free WiFi","Pool Access","Room Service"],images:[roomImg1,roomImg2,roomImg3,roomImg4],isAvailable:true,createdAt:"2025-03-05T10:21:04Z",updatedAt:"2025-03-05T10:21:04Z",__v:0},
     {_id:"rm_102",hotel:hotelDummyData2,roomType:"Deluxe Room",pricePerNight:349,amenities:["Free Breakfast","Free WiFi"],images:[roomImg2,roomImg3,roomImg4,roomImg1],isAvailable:true,createdAt:"2025-03-06T10:21:04Z",updatedAt:"2025-03-06T10:21:04Z",__v:0},
@@ -195,13 +195,13 @@ export const roomsDummyData=[
     {_id:"rm_104",hotel:hotelDummyData4,roomType:"Single Room",pricePerNight:179,amenities:["Free WiFi"],images:[roomImg4,roomImg1,roomImg2,roomImg3],isAvailable:true,createdAt:"2025-03-08T10:21:04Z",updatedAt:"2025-03-08T10:21:04Z",__v:0},
 ]
 
-// User Bookings Dummy Data
+
 export const userBookingsDummyData=[
     {_id:"bk_301",user:userDummyData,room:roomsDummyData[0],hotel:hotelDummyData,checkInDate:"2025-06-10T00:00:00Z",checkOutDate:"2025-06-12T00:00:00Z",totalPrice:998,guests:2,status:"confirmed",paymentMethod:"Stripe",isPaid:true,createdAt:"2025-04-01T06:42:01Z",updatedAt:"2025-04-01T06:43:54Z",__v:0},
     {_id:"bk_302",user:userDummyData,room:roomsDummyData[2],hotel:hotelDummyData3,checkInDate:"2025-05-15T00:00:00Z",checkOutDate:"2025-05-16T00:00:00Z",totalPrice:249,guests:1,status:"pending",paymentMethod:"Pay At Hotel",isPaid:false,createdAt:"2025-04-02T06:41:45Z",updatedAt:"2025-04-02T06:41:45Z",__v:0},
 ]
 
-// Dashboard Dummy Data
+
 export const dashboardDummyData={
     "totalBookings":2,
     "totalRevenue":1247,

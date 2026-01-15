@@ -10,18 +10,18 @@ export const createRoom = async (req, res) => {
         if(!hotel){
             return res.json({success : false, message : "Hotel Not Found"})
         }
-        //upload image
+
         const uploadImage = req.files.map(async (file) => {
             const response = await cloudinary.uploader.upload(file.path);
             return response.secure_url;
         })  
-        //we will wait for all images to complete uploading
+  
         const images = await Promise.all(uploadImage);
         
         await Room.create({
             hotel : hotel._id,
             roomType, 
-            pricePerNight : +pricePerNight, //plus will create the price coming in string into number
+            pricePerNight : +pricePerNight,
             amenities: JSON.parse(amenities),
             images,
         });

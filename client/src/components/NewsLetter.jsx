@@ -6,7 +6,7 @@ const Newsletter = () => {
     <div className="mx-6 md:mx-16 lg:mx-24 my-24">
       <div className="bg-black text-white rounded-2xl flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 relative overflow-hidden">
         
-        {/* Decorative Background Elements */}
+        {}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gray-800 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-gray-700 rounded-full blur-2xl opacity-20 translate-y-1/2 -translate-x-1/2"></div>
 

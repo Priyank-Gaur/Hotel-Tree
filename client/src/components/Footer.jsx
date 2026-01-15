@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div className="mx-6 md:mx-16 lg:mx-24 mt-20 mb-10">
       <div className="flex flex-col md:flex-row justify-between items-start gap-10">
-        {/* Brand Section */}
+        {}
         <div className="max-w-sm">
           <img src={assets.logo} alt="Logo" className="h-8 mb-6 invert opacity-80" />
           <p className="text-gray-500 text-sm leading-relaxed mb-6">
@@ -19,7 +19,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Quick Links */}
+        {}
         <div className="flex flex-col gap-4">
           <h3 className="font-bold text-lg mb-2">Company</h3>
           <ul className="text-gray-500 text-sm flex flex-col gap-2">
@@ -30,7 +30,7 @@ const Footer = () => {
           </ul>
         </div>
 
-         {/* Support Links */}
+         {}
          <div className="flex flex-col gap-4">
           <h3 className="font-bold text-lg mb-2">Support</h3>
           <ul className="text-gray-500 text-sm flex flex-col gap-2">
@@ -41,7 +41,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Newsletter Teaser (Optional, since we have a section) */}
+        {}
         <div className="max-w-xs">
            <h3 className="font-bold text-lg mb-4">Contact</h3>
            <p className="text-gray-500 text-sm mb-2">123 Luxury Lane, Paradise City, PC 56789</p>

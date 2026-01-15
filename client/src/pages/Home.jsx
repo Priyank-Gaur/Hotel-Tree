@@ -17,7 +17,7 @@ const Home = () => {
       const element = document.getElementById(location.state.scrollTo);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
-        // Clear state to prevent scroll on subsequent refreshes
+        
         window.history.replaceState({}, document.title);
       }
     }
@@ -30,7 +30,7 @@ const Home = () => {
       <FeaturedDestination/>
       <ExclusiveOffers />
       <Testimonial/>
-      {/* <Newsletter/> */}
+      {}
       {showRegModal && <HotelReg setShowRegModal={setShowRegModal} />}
     </>
   );

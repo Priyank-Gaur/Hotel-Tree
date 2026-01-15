@@ -15,7 +15,7 @@ const Navbar = () => {
         { name: 'Home', path: '/' },
         { name: 'Hotels', path: '/hotels' },
         { name: 'Offers', path: '/' },
-        // { name: 'About', path: '/' },
+        
     ];
 
     const [isScrolled, setIsScrolled] = useState(false);
@@ -47,7 +47,7 @@ const Navbar = () => {
     return (
             <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 transition-all duration-300 z-50 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-6"}`}>
 
-                {/* Logo */}
+                {}
                 <Link to='/'>
                     <img 
                         src={assets.logo} 
@@ -56,7 +56,7 @@ const Navbar = () => {
                     />
                 </Link>
 
-                {/* Desktop Nav */}
+                {}
                 <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
                     {navLinks.map((link, i) => (
                         <Link 
@@ -83,7 +83,7 @@ const Navbar = () => {
 
                 </div>
 
-                {/* Desktop Right */}
+                {}
                 <div className="hidden md:flex items-center gap-6">
                     
                     {user ?
@@ -110,7 +110,7 @@ const Navbar = () => {
                      }
                 </div>
 
-                {/* Mobile Menu Button */}
+                {}
                 <div className="flex items-center gap-4 md:hidden">
                     {user && <UserButton afterSignOutUrl="/">
                         <UserButton.MenuItems>
@@ -127,10 +127,10 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                {/* Mobile Menu Overlay */}
+                {}
                  <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`} onClick={() => setIsMenuOpen(false)} />
 
-                {/* Mobile Menu Sidebar */}
+                {}
                 <div className={`fixed top-0 right-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 md:hidden flex flex-col p-6 gap-6 ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
                     <div className="flex justify-between items-center mb-4">
                         <span className="font-playfair text-xl font-bold text-gray-900">HotelTree</span>

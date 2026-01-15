@@ -13,7 +13,7 @@ const MyBookings = () => {
   const fetchBookings = async () => {
     try {
         const token = await getToken();
-        // If no token (not logged in), don't fetch
+        
         if (!token) return; 
 
         const response = await axios.get('/api/booking/user',
@@ -35,7 +35,7 @@ const MyBookings = () => {
         if(user){
             fetchBookings();
         } else {
-            // User not logged in, stop loading and redirect or show empty
+            
             setLoading(false);
             navigate('/'); 
         }
@@ -75,7 +75,7 @@ const MyBookings = () => {
             key={booking._id}
             className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow"
           >
-            {/* Image */}
+            {}
             <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 cursor-pointer" 
                 onClick={() => booking.room && navigate(`/rooms/${booking.room._id}`)}>
               {booking.room?.images?.[0] ? (
@@ -91,7 +91,7 @@ const MyBookings = () => {
               )}
             </div>
 
-            {/* Details */}
+            {}
             <div className="flex-1">
               <div className="flex justify-between items-start">
                   <div>
@@ -143,7 +143,7 @@ const MyBookings = () => {
               </div>
             </div>
             
-            {/* Actions */}
+            {}
             <div className="flex flex-row md:flex-col gap-3 justify-center md:border-l md:border-gray-200 md:pl-6">
                  {booking.room && (
                     <button 

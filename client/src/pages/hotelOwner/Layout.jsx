@@ -8,7 +8,7 @@ import HotelReg from '../../components/HotelReg'
 const Layout = () => {
     const {isOwner, navigate, userDataLoaded} = useAppContext();
     
-    // logic to prevent redirect is handled by removing the useEffect that did it
+    
     
   if (!userDataLoaded) {
       return (

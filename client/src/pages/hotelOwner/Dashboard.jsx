@@ -17,12 +17,12 @@ const Dashboard = () => {
     try {
       const token = await getToken();
       
-      // Fetch hotel bookings
+      
       const bookingsResponse = await axios.get('/api/booking/hotel', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      // Fetch owner rooms to get total count
+      
       const roomsResponse = await axios.get('/api/room/owner', {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -35,7 +35,7 @@ const Dashboard = () => {
           totalBookings,
           totalRevenue,
           totalRooms: rooms.length,
-          bookings: bookings.slice(0, 5) // Show only recent 5 bookings
+          bookings: bookings.slice(0, 5) 
         });
       }
     } catch (error) {

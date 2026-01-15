@@ -42,7 +42,7 @@ const AddRoom = () => {
   const handleSubmit = async (e) => {
       e.preventDefault();
       
-      // Validate at least one image
+      
       const validImages = images.filter(img => img !== null);
       if (validImages.length === 0) {
           toast.error('Please upload at least one room image');
@@ -54,12 +54,12 @@ const AddRoom = () => {
       try {
           const formData = new FormData();
           
-          // Append images
+          
           validImages.forEach(image => {
               formData.append('images', image);
           });
           
-          // Append other data
+          
           formData.append('roomType', data.roomType);
           formData.append('pricePerNight', data.price);
           formData.append('amenities', JSON.stringify(data.amenities));
@@ -90,7 +90,7 @@ const AddRoom = () => {
         <h2 className="text-2xl font-bold mb-6">Add New Room</h2>
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col gap-6">
             
-            {/* Image Upload */}
+            {}
             <div>
                 <p className="font-medium mb-2">Upload Room Images (Max 4)</p>
                 <div className="flex gap-4 flex-wrap">
@@ -113,7 +113,7 @@ const AddRoom = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Room Type */}
+                {}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Room Type</label>
                     <select 
@@ -133,7 +133,7 @@ const AddRoom = () => {
                     </select>
                 </div>
 
-                {/* Price */}
+                {}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Price Per Night ($)</label>
                     <input 
@@ -148,7 +148,7 @@ const AddRoom = () => {
                 </div>
             </div>
 
-            {/* Amenities */}
+            {}
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">

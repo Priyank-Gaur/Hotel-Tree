@@ -16,14 +16,12 @@ export const storeRecentSearchedCities = async (req, res)=>{
         const { recentSearchedCity} = req.body;
         const user = await req.user;
         
-        // Remove if already exists (case-insensitive) to move it to the end (most recent)
         user.recentSearchedCities = user.recentSearchedCities.filter(
             city => city.toLowerCase() !== recentSearchedCity.toLowerCase()
         );
 
         user.recentSearchedCities.push(recentSearchedCity);
 
-        // Keep only the last 3 searches
         if(user.recentSearchedCities.length > 3){
             user.recentSearchedCities.shift();
         }

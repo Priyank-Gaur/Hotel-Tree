@@ -10,7 +10,7 @@ const RecommendedDestinations = () => {
 
   useEffect(() => {
     const fetchRecommendedRooms = async () => {
-      // Only fetch if user is logged in and has searched cities
+      
       if (!user || !searchedCities || searchedCities.length === 0) {
         setLoading(false);
         return;
@@ -19,21 +19,21 @@ const RecommendedDestinations = () => {
       try {
         const response = await axios.get('/api/room');
         if (response.data.success) {
-          // Filter rooms from user's searched cities
+          
           const filtered = response.data.rooms.filter(room => 
             searchedCities.some(city => 
               room.hotel?.city?.toLowerCase() === city.toLowerCase()
             )
           );
           
-          // Get up to 4 rooms, prioritizing most recently searched cities
+          
           const roomsByCity = {};
           searchedCities.forEach(city => {
             const cityRooms = filtered.filter(room => 
               room.hotel?.city?.toLowerCase() === city.toLowerCase()
             );
             if (cityRooms.length > 0) {
-              roomsByCity[city] = cityRooms[0]; // Take first room from each city
+              roomsByCity[city] = cityRooms[0]; 
             }
           });
           
@@ -50,7 +50,7 @@ const RecommendedDestinations = () => {
     fetchRecommendedRooms();
   }, [user, searchedCities]);
 
-  // Don't render if no user, no searched cities, or no recommended rooms
+  
   if (!user || !searchedCities || searchedCities.length === 0 || recommendedRooms.length === 0) {
     return null;
   }

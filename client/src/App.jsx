@@ -33,7 +33,7 @@ const App = () => {
             <Route path="/rooms/:id" element={<RoomDetails />} />
             <Route path="/my-bookings" element={<MyBookings />} />
             
-             {/* Admin Routes */}
+             {}
              <Route path="/owner" element={<Layout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="add-room" element={<AddRoom />} />

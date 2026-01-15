@@ -14,7 +14,7 @@ const FeaturedDestination = () => {
     try {
       const response = await axios.get('/api/room');
       if (response.data.success) {
-        // Get the latest 4 rooms sorted by creation date
+        
         const latestRooms = response.data.rooms
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 4);
