@@ -22,6 +22,9 @@ const Hotels = () => {
   
   const [allAmenities, setAllAmenities] = useState([]);
   const [allRoomTypes, setAllRoomTypes] = useState([]);
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -97,6 +100,16 @@ const Hotels = () => {
 
     return cityMatch || nameMatch;
   });
+
+  // Calculate pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const paginatedHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, priceRange, selectedAmenities, selectedRoomTypes]);
 
   const handlePriceChange = (e) => {
     setPriceRange([0, Number(e.target.value)]);
@@ -228,8 +241,9 @@ const Hotels = () => {
 
         {}
         <div className="flex flex-col gap-16">
-            {filteredHotels.length > 0 ? (
-            filteredHotels.map(hotel => (
+            {paginatedHotels.length > 0 ? (
+            <>
+            {paginatedHotels.map(hotel => (
                 <div key={hotel._id} className="animate-fadeIn">
                 {}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-gray-200 pb-4">
@@ -254,7 +268,39 @@ const Hotels = () => {
                     ))}
                 </div>
                 </div>
-            ))
+            ))}
+            
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center gap-4 mt-8">
+                <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                        currentPage === 1 
+                        ? "border-gray-200 text-gray-300 cursor-not-allowed" 
+                        : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black"
+                    }`}
+                >
+                    Previous
+                </button>
+                
+                <span className="text-sm font-medium text-gray-600">
+                    Page {currentPage} of {Math.ceil(filteredHotels.length / itemsPerPage)}
+                </span>
+                
+                <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(filteredHotels.length / itemsPerPage)))}
+                    disabled={currentPage === Math.ceil(filteredHotels.length / itemsPerPage)}
+                    className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                       currentPage === Math.ceil(filteredHotels.length / itemsPerPage)
+                        ? "border-gray-200 text-gray-300 cursor-not-allowed" 
+                        : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black"
+                    }`}
+                >
+                    Next
+                </button>
+            </div>
+            </>
             ) : (
             <div className="flex flex-col items-center justify-center py-20 text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
                 <img src={assets.locationIcon} className="w-16 h-16 opacity-20 mb-4" alt="No results"/>
