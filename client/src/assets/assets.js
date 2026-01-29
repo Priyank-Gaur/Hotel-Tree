@@ -74,16 +74,45 @@ export const assets={
 }
 
 export const cities = [
+    // Major International Cities
     "Bangkok", "Paris", "London", "Dubai", "Singapore", "Kuala Lumpur", "New York", "Istanbul", "Tokyo", "Antalya",
     "Seoul", "Osaka", "Makkah", "Phuket", "Pattaya", "Milan", "Barcelona", "Palma de Mallorca", "Bali", "Hong Kong",
     "Frankfurt", "Dublin", "Taipei", "Miami", "Los Angeles", "Las Vegas", "Rome", "Prague", "Amsterdam", "Vienna",
     "Madrid", "Berlin", "Ho Chi Minh City", "Johannesburg", "Riyadh", "Doha", "Beijing", "Sydney", "Cairo", "Florence",
     "Lisbon", "Moscow", "Athens", "Venice", "Orlando", "Shanghai", "Toronto", "Vancouver", "San Francisco", "Chicago",
-    "Munich", "Budapest", "St. Petersburg", "Warsaw", "Cancun", "Mumbai", "Delhi", "Jaipur", "Agra", "Chennai",
-    "Kolkata", "Bengaluru", "Hyderabad", "Goa", "Pune", "Udaipur", "Shimla", "Manali", "Darjeeling", "Gangtok",
-    "Varanasi", "Rishikesh", "Haridwar", "Amritsar", "Chandigarh", "Mysore", "Ooty", "Kochi", "Munnar", "Alleppey",
-    "Thiruvananthapuram", "Colombo", "Kandy", "Kathmandu", "Thimphu", "Male", "Jakarta", "Hanoi", "Manila", "Yangon",
-    "Phnom Penh", "Siem Reap", "Vientiane", "Luang Prabang", "Chiang Mai", "Krabi", "Samui", "Langley", "Queenstown", "Auckland"
+    "Munich", "Budapest", "St. Petersburg", "Warsaw", "Cancun", 
+
+    // Major Indian Cities
+    "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubballi-Dharwad",
+    "Bareilly", "Moradabad", "Mysore", "Gurgaon", "Aligarh", "Jalandhar", "Tiruchirappalli", "Bhubaneswar", "Salem", "Mira-Bhayandar",
+    "Warangal", "Thiruvananthapuram", "Bhiwandi", "Saharanpur", "Guntur", "Amravati", "Bikaner", "Noida", "Jamshedpur", "Bhilai",
+    "Cuttack", "Firozabad", "Kochi", "Nellore", "Bhavnagar", "Dehradun", "Durgapur", "Asansol", "Rourkela", "Nanded",
+    "Kolhapur", "Ajmer", "Akola", "Gulbarga", "Jamnagar", "Ujjain", "Loni", "Siliguri", "Jhansi", "Ulhasnagar",
+    "Jammu", "Sangli-Miraj & Kupwad", "Mangalore", "Erode", "Belgaum", "Ambattur", "Tirunelveli", "Malegaon", "Gaya", "Jalgaon",
+    "Udaipur", "Maheshtala", "Davanagere", "Kozhikode", "Akbarpur", "Kurnool", "Rajpur Sonarpur", "Rajahmundry", "Bokaro", "South Dumdum",
+    "Bellary", "Patiala", "Gopalpur", "Agartala", "Bhagalpur", "Muzaffarnagar", "Bhatpara", "Panihati", "Latur", "Dhule",
+    "Tirupati", "Rohtak", "Korba", "Bhilwara", "Berhampur", "Muzaffarpur", "Ahmednagar", "Mathura", "Kollam", "Avadi",
+    "Kadapa", "Kamarhati", "Sambalpur", "Bilaspur", "Shahjahanpur", "Satara", "Bijapur", "Rampur", "Shivamogga", "Chandrapur",
+    "Junagadh", "Thrissur", "Alwar", "Bardhaman", "Kulti", "Nizamabad", "Parbhani", "Tumkur", "Khammam", "Ozhukarai",
+    "Bihar Sharif", "Panipat", "Darbhanga", "Bally", "Aizawl", "Dewas", "Ichalkaranji", "Karnal", "Bathinda", "Jalna",
+    "Eluru", "Barasat", "Kirari Suleman Nagar", "Purnia", "Satna", "Mau", "Sonipat", "Farrukhabad", "Sagar", "Rourkela",
+    "Durg", "Imphal", "Ratlam", "Hapur", "Arrah", "Anantapur", "Karimnagar", "Etawah", "Ambernath", "North Dumdum",
+    "Bharatpur", "Begusarai", "New Delhi", "Gandhidham", "Baranagar", "Tiruvottiyur", "Puducherry", "Sikar", "Thoothukudi", "Rewa",
+    "Mirzapur", "Raichur", "Pali", "Ramagundam", "Haridwar", "Vijayanagaram", "Katihar", "Nagercoil", "Sri Ganganagar", "Karawal Nagar",
+    "Mango", "Thanjavur", "Bulandshahr", "Uluberia", "Murwara", "Sambhal", "Singrauli", "Nadiad", "Secunderabad", "Naihati",
+    "Yamunanagar", "Bidhan Nagar", "Pallavaram", "Bidar", "Munger", "Panchkula", "Burhanpur", "Raurkela Industrial Township", "Kharagpur", "Dindigul",
+    "Gandhinagar", "Hospet", "Nangloi Jat", "Malda", "Ongole", "Deoghar", "Chapra", "Haldia", "Khandwa", "Nandyal",
+    "Morena", "Amroha", "Anand", "Bhind", "Bhalswa Jahangir Pur", "Madhyamgram", "Bhiwani", "Navi Mumbai Panvel Raigad", "Bahraich", "Shivpuri",
+    "Jaunpur", "Saha", "Rae Bareli", "Fatehpur", "Bhuj", "Monghyr", "Orai", "Bahadurgarh", "Vellore", "Maunath Bhanjan",
+    "Unnao", "Surendranagar", "Raiganj", "Sirsa", "Danapur", "Ambikapur", "Sitapur", "Haldwani-cum-Kathgodam", "Serampore", "Vidisha",
+    "Phagwara", "Hassan", "Machilipatnam", "Lalitpur", "Deesa", "Hamirpur", "Azamgarh", "Guntakal", "Palanpur", "Udgir",
+    "Moga", "Gonda", "Kanchipuram", "Kumbakonam", "Budaun", "Pilibhit", "Hazaaribagh", "Yavatmal", "Himgiri", "Hindaun",
+    "Chittoor", "Veraval", "Lakhimpur", "Sitapur", "Hindupur", "Santipur", "Balurghat", "Ganj Basoda", "Medininagar", "Hoshangabad",
+    "Kishanganj", "Gangtok", "Shimla", "Manali", "Darjeeling", "Mussoorie", "Nainital", "Dalhousie", "Pahalgam", "Mount Abu"
 ]
 
 

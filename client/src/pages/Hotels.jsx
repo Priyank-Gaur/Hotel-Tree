@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import HotelCard from "../components/HotelCard";
+import CityAutocomplete from "../components/CityAutocomplete";
 
 const Hotels = () => {
   const { axios } = useAppContext();
@@ -212,14 +213,13 @@ const Hotels = () => {
             
             <div className="w-full md:w-80">
                 <div className="relative">
-                    <input 
-                        type="text"
-                        placeholder="Search city or hotel..."
+                    <CityAutocomplete
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={setSearchTerm}
+                        placeholder="Search city or hotel..."
                         className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
                     />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                         <img src={assets.searchIcon} alt="search" className="w-4 h-4 opacity-60" />
                     </div>
                 </div>

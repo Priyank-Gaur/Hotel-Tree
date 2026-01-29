@@ -3,6 +3,7 @@ import heroImage from "../assets/heroImage.png";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
+import CityAutocomplete from "./CityAutocomplete";
 
 const Hero = ({ setShowRegModal }) => {
   const navigate = useNavigate();
@@ -84,14 +85,11 @@ const Hero = ({ setShowRegModal }) => {
                         <img src={assets.locationIcon} alt="" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity invert" />
                         <label htmlFor="destinationInput" className="text-xs font-medium uppercase tracking-wider text-gray-300">Destination</label>
                     </div>
-                    <input
-                        id="destinationInput"
-                        type="text"
+                    <CityAutocomplete
                         value={destination}
-                        onChange={(e) => setDestination(e.target.value)}
-                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
+                        onChange={setDestination}
                         placeholder="Where to?"
-                        required
+                        className="w-full bg-transparent outline-none text-white text-lg placeholder-gray-400 font-medium"
                     />
                 </div>
 
