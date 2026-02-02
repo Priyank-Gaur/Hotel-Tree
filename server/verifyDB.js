@@ -19,22 +19,14 @@ const verify = async () => {
         console.log(`Total Rooms: ${roomCount}`);
         console.log(`Total Users: ${userCount}`);
 
-        const sampleHotel = await Hotel.findOne({name: /Grand Hotel/});
+        const sampleCity = "Paris";
+        const hotelsInCity = await Hotel.find({ city: sampleCity });
+        console.log(`\nHotels in ${sampleCity}: ${hotelsInCity.length}`);
         
-        console.log("Testing Controller Query...");
-        const rooms = await Room.find({isAvailable : true }).populate({
-            path : "hotel",
-            populate : {
-                path : "owner",
-                select : "image"
-            }   
-        }).sort({createdAt : -1}).limit(5);
-
-        console.log(`Query found ${rooms.length} rooms.`);
-        if (rooms.length > 0) {
-            console.log("Top Room Created At:", rooms[0].createdAt);
-            console.log("Top Room Hotel:", rooms[0].hotel ? rooms[0].hotel.name : "NULL");
-            console.log("Top Room Hotel Owner:", (rooms[0].hotel && rooms[0].hotel.owner) ? rooms[0].hotel.owner : "NULL");
+        for (const hotel of hotelsInCity) {
+            const rooms = await Room.find({ hotel: hotel._id });
+            console.log(`- Hotel: ${hotel.name}, Rooms: ${rooms.length}`);
+            rooms.forEach(r => console.log(`  - ${r.roomType} ($${r.pricePerNight})`));
         }
 
     } catch (error) {

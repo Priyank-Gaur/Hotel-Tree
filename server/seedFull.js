@@ -80,50 +80,64 @@ const seed = async () => {
 
     let createdCount = 0;
     for (const city of cities) {
-        const hotelName = `Grand Hotel ${city}`;
-        
-        const existing = await Hotel.findOne({ city: city, name: hotelName });
-        if (existing) {
-            continue;
-        }
+        const hotelConfigs = [
+            { nameSuffix: "Grand Hotel", addressSuffix: "Central Street" },
+            { nameSuffix: "Royal Residency", addressSuffix: "Park Avenue" }
+        ];
 
-        try {
-            const hotel = await Hotel.create({
-                name: hotelName,
-                address: `123 Central Street, ${city}`,
-                contact: "+91 9876543210",
-                owner: owner._id,
-                city: city
-            });
-
+        for (const config of hotelConfigs) {
+            const hotelName = `${config.nameSuffix} ${city}`;
+            
+            let hotel = await Hotel.findOne({ city: city, name: hotelName });
+            if (!hotel) {
+                try {
+                    hotel = await Hotel.create({
+                        name: hotelName,
+                        address: `123 ${config.addressSuffix}, ${city}`,
+                        contact: "+91 9876543210",
+                        owner: owner._id,
+                        city: city
+                    });
+                } catch (err) {
+                    console.error(`Error creating hotel ${hotelName}:`, err.message);
+                    continue;
+                }
+            }
+    
             const roomImages = [
                 "/roomImg1.png", 
                 "/roomImg2.png", 
                 "/roomImg3.png", 
                 "/roomImg4.png"
             ];
-
+    
             const roomsData = [
                 { type: "Deluxe Suite", price: 299, amenities: ["Free WiFi", "Pool Access", "Breakfast", "Kingsize Bed"] },
-                { type: "Standard Room", price: 149, amenities: ["Free WiFi", "TV", "AC"] }
+                { type: "Standard Room", price: 149, amenities: ["Free WiFi", "TV", "AC"] },
+                { type: "Family Suite", price: 399, amenities: ["Free WiFi", "Kitchenette", "2 Kingsize Beds", "Balcony"] }
             ];
-
+    
             for (const r of roomsData) {
-                await Room.create({
-                    hotel: hotel._id,
-                    roomType: r.type,
-                    pricePerNight: r.price,
-                    amenities: r.amenities,
-                    images: roomImages,
-                    isAvailable: true
-                });
+                const existingRoom = await Room.findOne({ hotel: hotel._id, roomType: r.type });
+                if (!existingRoom) {
+                    try {
+                        await Room.create({
+                            hotel: hotel._id,
+                            roomType: r.type,
+                            pricePerNight: r.price,
+                            amenities: r.amenities,
+                            images: roomImages,
+                            isAvailable: true
+                        });
+                    } catch (err) {
+                        console.error(`Error creating room ${r.type}:`, err.message);
+                    }
+                }
             }
-            createdCount++;
-            if (createdCount % 10 === 0) {
-                console.log(`Created hotels for ${createdCount} cities...`);
-            }
-        } catch (err) {
-            console.error(`Error creating hotel for ${city}:`, err.message);
+        }
+        createdCount++;
+        if (createdCount % 10 === 0) {
+            console.log(`Processed hotels for ${createdCount} cities...`);
         }
     }
     
