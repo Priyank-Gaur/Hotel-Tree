@@ -26,7 +26,7 @@ const verify = async () => {
         for (const hotel of hotelsInCity) {
             const rooms = await Room.find({ hotel: hotel._id });
             console.log(`- Hotel: ${hotel.name}, Rooms: ${rooms.length}`);
-            rooms.forEach(r => console.log(`  - ${r.roomType} ($${r.pricePerNight})`));
+            rooms.forEach(r => console.log(`  - ${r.roomType} ($${r.pricePerNight}) MaxGuests: ${r.maxGuests}`));
         }
 
     } catch (error) {

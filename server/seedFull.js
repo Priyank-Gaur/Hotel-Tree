@@ -7,7 +7,7 @@ import User from './models/User.js';
 dotenv.config();
 
 const cities = [
-    // Major International Cities
+
     "Bangkok", "Paris", "London", "Dubai", "Singapore", "Kuala Lumpur", "New York", "Istanbul", "Tokyo", "Antalya",
     "Seoul", "Osaka", "Makkah", "Phuket", "Pattaya", "Milan", "Barcelona", "Palma de Mallorca", "Bali", "Hong Kong",
     "Frankfurt", "Dublin", "Taipei", "Miami", "Los Angeles", "Las Vegas", "Rome", "Prague", "Amsterdam", "Vienna",
@@ -15,7 +15,6 @@ const cities = [
     "Lisbon", "Moscow", "Athens", "Venice", "Orlando", "Shanghai", "Toronto", "Vancouver", "San Francisco", "Chicago",
     "Munich", "Budapest", "St. Petersburg", "Warsaw", "Cancun", 
 
-    // Major Indian Cities
     "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
     "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
     "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
@@ -112,9 +111,9 @@ const seed = async () => {
             ];
     
             const roomsData = [
-                { type: "Deluxe Suite", price: 299, amenities: ["Free WiFi", "Pool Access", "Breakfast", "Kingsize Bed"] },
-                { type: "Standard Room", price: 149, amenities: ["Free WiFi", "TV", "AC"] },
-                { type: "Family Suite", price: 399, amenities: ["Free WiFi", "Kitchenette", "2 Kingsize Beds", "Balcony"] }
+                { type: "Deluxe Suite", price: 299, amenities: ["Free WiFi", "Pool Access", "Breakfast", "Kingsize Bed"], maxGuests: 4 },
+                { type: "Standard Room", price: 149, amenities: ["Free WiFi", "TV", "AC"], maxGuests: 2 },
+                { type: "Family Suite", price: 399, amenities: ["Free WiFi", "Kitchenette", "2 Kingsize Beds", "Balcony"], maxGuests: 6 }
             ];
     
             for (const r of roomsData) {
@@ -127,10 +126,18 @@ const seed = async () => {
                             pricePerNight: r.price,
                             amenities: r.amenities,
                             images: roomImages,
-                            isAvailable: true
+                            isAvailable: true,
+                            maxGuests: r.maxGuests
                         });
+                        console.log(`    Created ${r.type} - Max: ${r.maxGuests}`);
                     } catch (err) {
                         console.error(`Error creating room ${r.type}:`, err.message);
+                    }
+                } else {
+                    if (existingRoom.maxGuests !== r.maxGuests) {
+                        existingRoom.maxGuests = r.maxGuests;
+                        await existingRoom.save();
+                        console.log(`    Updated ${r.type} maxGuests to ${r.maxGuests}`);
                     }
                 }
             }

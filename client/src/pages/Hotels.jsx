@@ -35,7 +35,7 @@ const Hotels = () => {
 
           
           const uniqueAmenities = [...new Set(fetchedRooms.flatMap((room) => room.amenities || []))];
-          const uniqueRoomTypes = [...new Set(fetchedRooms.map((room) => room.roomType))];
+          const uniqueRoomTypes = [...new Set(fetchedRooms.map((room) => room.roomType || "Unknown"))];
           setAllAmenities(uniqueAmenities);
           setAllRoomTypes(uniqueRoomTypes);
           
@@ -79,13 +79,14 @@ const Hotels = () => {
     
     const filteredRooms = hotel.rooms.filter(room => {
         
-        const priceMatch = room.pricePerNight >= priceRange[0] && room.pricePerNight <= priceRange[1];
+        const priceMatch = (room.pricePerNight || 0) >= priceRange[0] && (room.pricePerNight || 0) <= priceRange[1];
         
         
         const typeMatch = selectedRoomTypes.length === 0 || selectedRoomTypes.includes(room.roomType);
 
         
-        const amenityMatch = selectedAmenities.length === 0 || selectedAmenities.every(a => room.amenities.includes(a));
+        const roomAmenities = room.amenities || [];
+        const amenityMatch = selectedAmenities.length === 0 || selectedAmenities.every(a => roomAmenities.includes(a));
 
         return priceMatch && typeMatch && amenityMatch;
     });
@@ -93,20 +94,18 @@ const Hotels = () => {
     return { ...hotel, rooms: filteredRooms };
   }).filter(hotel => {
     
-    if (hotel.rooms.length === 0) return false;
+    if (!hotel.rooms || hotel.rooms.length === 0) return false;
 
-    const cityMatch = hotel.city?.toLowerCase().includes(searchTerm.toLowerCase());
-    const nameMatch = hotel.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const cityMatch = (hotel.city || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const nameMatch = (hotel.name || "").toLowerCase().includes(searchTerm.toLowerCase());
 
     return cityMatch || nameMatch;
   });
 
-  // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const paginatedHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Reset pagination when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, priceRange, selectedAmenities, selectedRoomTypes]);
@@ -128,6 +127,7 @@ const Hotels = () => {
   };
 
 
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -139,7 +139,6 @@ const Hotels = () => {
   return (
     <div className="flex flex-col md:flex-row gap-8 px-6 md:px-16 lg:px-24 py-10 pt-32 min-h-screen bg-gray-50/50">
       
-         {}
          <button 
         className="md:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm w-fit mb-4"
         onClick={()=>setShowFilters(!showFilters)}
@@ -148,11 +147,9 @@ const Hotels = () => {
             Filters
         </button>
 
-      {}
       <div className={`w-full md:w-1/4 min-w-[250px] bg-white p-6 rounded-lg shadow-sm h-fit ${showFilters ? 'block' : 'hidden md:block'}`}>
         <h3 className="text-lg font-semibold mb-6">Filters</h3>
 
-        {}
         <div className="mb-6">
           <h4 className="font-medium mb-3">Price Range</h4>
           <input
@@ -169,7 +166,6 @@ const Hotels = () => {
           </div>
         </div>
 
-        {}
         <div className="mb-6">
           <h4 className="font-medium mb-3">Room Type</h4>
           <div className="flex flex-col gap-2">
@@ -187,7 +183,6 @@ const Hotels = () => {
           </div>
         </div>
 
-        {}
         <div>
           <h4 className="font-medium mb-3">Amenities</h4>
           <div className="flex flex-col gap-2">
@@ -213,9 +208,7 @@ const Hotels = () => {
         </button>
       </div>
 
-      {}
       <div className="flex-1">
-        {}
         <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
             <div>
             <h1 className="text-3xl font-playfair font-bold text-gray-900 mb-2">
@@ -239,13 +232,11 @@ const Hotels = () => {
             </div>
         </div>
 
-        {}
         <div className="flex flex-col gap-16">
             {paginatedHotels.length > 0 ? (
             <>
             {paginatedHotels.map(hotel => (
                 <div key={hotel._id} className="animate-fadeIn">
-                {}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-gray-200 pb-4">
                     <div>
                         <h2 className="text-2xl font-bold font-playfair text-gray-800 flex items-center gap-2">
@@ -261,7 +252,6 @@ const Hotels = () => {
                     </div>
                 </div>
                 
-                {}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                     {hotel.rooms.map((room, idx) => (
                         <HotelCard key={room._id} room={room} index={idx} />
@@ -270,7 +260,6 @@ const Hotels = () => {
                 </div>
             ))}
             
-            {/* Pagination Controls */}
             <div className="flex justify-center items-center gap-4 mt-8">
                 <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}

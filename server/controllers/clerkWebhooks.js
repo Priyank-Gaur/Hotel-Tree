@@ -1,5 +1,5 @@
 import connectDB from "../configs/db.js";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Hotel from "../models/Hotel.js";
 import {Webhook} from "svix";
 

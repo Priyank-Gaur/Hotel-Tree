@@ -250,11 +250,21 @@ const RoomDetails = () => {
                     <input 
                         type="number" 
                         min="1" 
-                        max="10"
+                        max={room.maxGuests || 2}
                         value={guests}
-                        onChange={(e)=>setGuests(e.target.value)}
+                        onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            const max = room.maxGuests || 2;
+                            if(val > max) {
+                                toast.error(`Maximum ${max} guests allowed`);
+                                setGuests(max);
+                            } else {
+                                setGuests(val);
+                            }
+                        }}
                         className="w-full text-sm outline-none text-gray-600"
                     />
+                    <span className="text-xs text-gray-500 mt-1 block">Max: {room.maxGuests || 2} guests</span>
                 </div>
                 
                 <button 
