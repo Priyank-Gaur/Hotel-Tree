@@ -75,7 +75,7 @@ const Navbar = () => {
                                     }
                                 }
                             }}
-                            className={`text-sm font-medium tracking-wide hover:opacity-70 transition-opacity ${isScrolled ? "text-gray-800" : "text-white"}`}
+                            className={`px-3 py-1.5 rounded-full text-sm font-bold tracking-wide transition-all ${isScrolled ? "text-gray-800 hover:bg-gray-100" : "text-white bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 shadow-sm"}`}
                         >
                             {link.name}
                         </Link>
@@ -83,11 +83,15 @@ const Navbar = () => {
 
                 </div>
 
-                {}
+                {/* Right Side */}
                 <div className="hidden md:flex items-center gap-6">
                     
                     {user ?
-                    (<UserButton afterSignOutUrl="/">
+                    (<UserButton afterSignOutUrl="/" appearance={{
+                        elements: {
+                            userButtonAvatarBox: "w-10 h-10"
+                        }
+                    }}>
                         <UserButton.MenuItems>
                             <UserButton.Action label='My Bookings' labelIcon={<BookIcon/>} onClick={()=>navigate('/my-bookings')} />
                         </UserButton.MenuItems>
@@ -96,13 +100,13 @@ const Navbar = () => {
                     (<div className="flex items-center gap-4">
                         <button 
                             onClick={()=>openSignIn({forceRedirectUrl: '/owner'})}
-                            className={`text-sm font-medium hover:opacity-70 transition-opacity ${isScrolled ? "text-gray-800" : "text-white"}`}
+                            className={`text-base font-medium hover:opacity-70 transition-opacity ${isScrolled ? "text-gray-800" : "text-white"}`}
                         >
                             Owner Login
                         </button>
                         <button 
                             onClick={()=>openSignIn({forceRedirectUrl: '/'})} 
-                            className={`px-6 py-2 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-xl ${isScrolled ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-white text-blue-900 hover:bg-gray-100"}`}
+                            className={`px-6 py-2 rounded-full text-base font-medium transition-all shadow-lg hover:shadow-xl ${isScrolled ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-white text-blue-900 hover:bg-gray-100"}`}
                         >
                             Login
                         </button>
@@ -110,9 +114,13 @@ const Navbar = () => {
                      }
                 </div>
 
-                {}
+                {/* Mobile Menu Button */}
                 <div className="flex items-center gap-4 md:hidden">
-                    {user && <UserButton afterSignOutUrl="/">
+                    {user && <UserButton afterSignOutUrl="/" appearance={{
+                        elements: {
+                            userButtonAvatarBox: "w-10 h-10"
+                        }
+                    }}>
                         <UserButton.MenuItems>
                             <UserButton.Action label='My Bookings' labelIcon={<BookIcon/>} onClick={()=>navigate('/my-bookings')} />
                         </UserButton.MenuItems>

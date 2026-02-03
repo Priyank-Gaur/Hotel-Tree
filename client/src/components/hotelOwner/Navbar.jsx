@@ -9,7 +9,11 @@ const Navbar = () => {
             <img src={assets.logo} alt="logo" className='h-9 invert opacity-80'/>
         </Link>
         <div className="flex items-center gap-6">
-            <UserButton/>
+            <UserButton appearance={{
+                elements: {
+                    userButtonAvatarBox: "w-10 h-10"
+                }
+            }}/>
         </div>
     </div>
 )
