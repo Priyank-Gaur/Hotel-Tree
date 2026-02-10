@@ -9,6 +9,7 @@ import hotelRouter from "./routes/hotelRoutes.js";
 import connectCloudinary from "./configs/cloudinary.js";
 import roomRouter from "./routes/roomRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
+import aiRouter from "./routes/aiRoutes.js";
 
 connectDB();
 connectCloudinary();
@@ -34,6 +35,7 @@ app.use("/api/user", userRouter);
 app.use("/api/hotel", hotelRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/booking", bookingRouter);
+app.use("/api/ai", aiRouter);
 
 
 

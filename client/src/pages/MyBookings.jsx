@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import TravelChecklistModal from "../components/TravelChecklistModal";
 
 const MyBookings = () => {
     const navigate = useNavigate();
@@ -10,7 +11,16 @@ const MyBookings = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
-  const fetchBookings = async () => {
+    // AI Modal State
+    const [isChecklistOpen, setIsChecklistOpen] = useState(false);
+    const [selectedBooking, setSelectedBooking] = useState(null);
+
+    const openChecklistRaw = (booking) => {
+        setSelectedBooking(booking);
+        setIsChecklistOpen(true);
+    };
+
+   const fetchBookings = async () => {
     try {
         const token = await getToken();
         
@@ -75,7 +85,7 @@ const MyBookings = () => {
             key={booking._id}
             className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 md:p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow"
           >
-            {}
+            {/* Image */}
             <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 cursor-pointer" 
                 onClick={() => booking.room && navigate(`/rooms/${booking.room._id}`)}>
               {booking.room?.images?.[0] ? (
@@ -91,7 +101,7 @@ const MyBookings = () => {
               )}
             </div>
 
-            {}
+            {/* Content */}
             <div className="flex-1">
               <div className="flex justify-between items-start">
                   <div>
@@ -143,7 +153,7 @@ const MyBookings = () => {
               </div>
             </div>
             
-            {}
+            {/* Actions */}
             <div className="flex flex-row md:flex-col gap-3 justify-center md:border-l md:border-gray-200 md:pl-6">
                  {booking.room && (
                     <button 
@@ -152,6 +162,15 @@ const MyBookings = () => {
                         View Details
                     </button>
                  )}
+                 
+                 {/* AI Checklist Button */}
+                     <button
+                        onClick={() => openChecklistRaw(booking)}
+                        className="flex-1 px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded text-sm hover:shadow-lg transition-all whitespace-nowrap flex items-center justify-center gap-1"
+                     >
+                         <span>✨</span> Checklist
+                     </button>
+
                  {booking.status === 'pending' && 
                     <button 
                         onClick={() => cancelBooking(booking._id)}
@@ -171,6 +190,14 @@ const MyBookings = () => {
             </div>
         )}
       </div>
+        
+    {/* AI Modal */}
+    <TravelChecklistModal 
+        isOpen={isChecklistOpen} 
+        onClose={() => setIsChecklistOpen(false)} 
+        booking={selectedBooking} 
+    />
+
     </div>
   );
 };
